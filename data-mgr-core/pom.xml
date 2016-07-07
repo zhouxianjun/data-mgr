@@ -24,11 +24,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.gary</groupId>
-            <artifactId>dao</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.alone</groupId>
             <artifactId>data-mgr-common</artifactId>
             <version>1.0</version>
