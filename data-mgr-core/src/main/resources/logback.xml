@@ -126,7 +126,7 @@
 	</logger>
 
 	<root level="${filter.logback.level}">
-		<!--<appender-ref ref="stdout" />-->
+		<appender-ref ref="stdout" />
 		<appender-ref ref="OTHERASYNC" />
 		<appender-ref ref="ERRORASYNC" />
 	</root>

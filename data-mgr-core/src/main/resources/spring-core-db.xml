@@ -55,9 +55,9 @@
 	</bean>
 	
 	<!-- 动态数据源，可以在运行时通过相应的holder动态改变当前的数据源-->
-	<bean id="dynamicDataSource" class="com.gary.dao.mybatis.DynamicDataSource">
+	<bean id="dynamicDataSource" class="com.alone.common.mybatis.DynamicDataSource">
 		<property name="targetDataSources">
-		   <map key-type="com.gary.dao.DataSourceType">
+		   <map key-type="com.alone.common.dto.DataSourceType">
 		      <entry key="WRITE" value-ref="coreWriteDataSource"/>     
 		      <entry key="READ" value-ref="coreReadDataSource"/>     
 		   </map>     
@@ -68,10 +68,10 @@
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<property name="dataSource" ref="dynamicDataSource" />
 		<property name="typeAliasesPackage" value="com.alone.entity" />
-		<property name="typeHandlersPackage" value="com.alone.mapper.handler" />
+		<property name="typeHandlersPackage" value="com.alone.core.mapper.handler" />
 	</bean>
 	<bean id="coreMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="game.mapper"/>
+		<property name="basePackage" value="com.alone.core.mapper"/>
 		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory" />
 	</bean>
 	<bean id="coreTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

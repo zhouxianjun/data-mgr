@@ -11,8 +11,7 @@
     <modules>
         <module>data-mgr-core</module>
         <module>data-mgr-common</module>
-        <module>dao</module>
-        <module>util</module>
+        <module>data-mgr-thrift</module>
     </modules>
 
     <properties>
