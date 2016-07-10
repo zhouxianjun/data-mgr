@@ -26,6 +26,19 @@
         <property name="protocolFactory">
             <bean class="org.apache.thrift.protocol.TCompactProtocol.Factory"/>
         </property>
+        <property name="executorService">
+            <bean class="com.alone.common.util.TimeOutThreadPoolExecutor">
+                <constructor-arg name="corePoolSize" value="5"/>
+                <constructor-arg name="keepAliveTime" value="0"/>
+                <constructor-arg name="maximumPoolSize" value="5"/>
+                <constructor-arg name="unit" value="MILLISECONDS"/>
+                <constructor-arg name="workQueue">
+                    <bean class="java.util.concurrent.LinkedBlockingQueue"/>
+                </constructor-arg>
+                <constructor-arg name="timeOut" value="2"/>
+                <constructor-arg name="timeOutUnit" value="MINUTES"/>
+            </bean>
+        </property>
         <property name="serverRegister" ref="zookeeperRegister"/>
     </bean>
     <context:annotation-config/>

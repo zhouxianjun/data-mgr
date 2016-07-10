@@ -14,12 +14,6 @@ var ttypes = require('./RoleService_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
 RoleService_roles_args = function(args) {
-  this.id = null;
-  if (args) {
-    if (args.id !== undefined && args.id !== null) {
-      this.id = args.id;
-    }
-  }
 };
 RoleService_roles_args.prototype = {};
 RoleService_roles_args.prototype.read = function(input) {
@@ -33,21 +27,7 @@ RoleService_roles_args.prototype.read = function(input) {
     if (ftype == Thrift.Type.STOP) {
       break;
     }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.I64) {
-        this.id = input.readI64();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
+    input.skip(ftype);
     input.readFieldEnd();
   }
   input.readStructEnd();
@@ -56,11 +36,6 @@ RoleService_roles_args.prototype.read = function(input) {
 
 RoleService_roles_args.prototype.write = function(output) {
   output.writeStructBegin('RoleService_roles_args');
-  if (this.id !== null && this.id !== undefined) {
-    output.writeFieldBegin('id', Thrift.Type.I64, 1);
-    output.writeI64(this.id);
-    output.writeFieldEnd();
-  }
   output.writeFieldStop();
   output.writeStructEnd();
   return;
@@ -68,9 +43,17 @@ RoleService_roles_args.prototype.write = function(output) {
 
 RoleService_roles_result = function(args) {
   this.success = null;
+  this.ex = null;
+  if (args instanceof PublicStruct_ttypes.InvalidOperation) {
+    this.ex = args;
+    return;
+  }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
       this.success = Thrift.copyList(args.success, [PublicStruct_ttypes.RoleStruct]);
+    }
+    if (args.ex !== undefined && args.ex !== null) {
+      this.ex = args.ex;
     }
   }
 };
@@ -109,9 +92,14 @@ RoleService_roles_result.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex = new PublicStruct_ttypes.InvalidOperation();
+        this.ex.read(input);
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -137,6 +125,476 @@ RoleService_roles_result.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_add_args = function(args) {
+  this.name = null;
+  this.pid = null;
+  if (args) {
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.pid !== undefined && args.pid !== null) {
+      this.pid = args.pid;
+    }
+  }
+};
+RoleService_add_args.prototype = {};
+RoleService_add_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I64) {
+        this.pid = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_add_args.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_add_args');
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 1);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.pid !== null && this.pid !== undefined) {
+    output.writeFieldBegin('pid', Thrift.Type.I64, 2);
+    output.writeI64(this.pid);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_add_result = function(args) {
+  this.success = null;
+  this.ex = null;
+  if (args instanceof PublicStruct_ttypes.InvalidOperation) {
+    this.ex = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex !== undefined && args.ex !== null) {
+      this.ex = args.ex;
+    }
+  }
+};
+RoleService_add_result.prototype = {};
+RoleService_add_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I64) {
+        this.success = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex = new PublicStruct_ttypes.InvalidOperation();
+        this.ex.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_add_result.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_add_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I64, 0);
+    output.writeI64(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_update_args = function(args) {
+  this.id = null;
+  this.name = null;
+  this.status = null;
+  this.pid = null;
+  if (args) {
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.status !== undefined && args.status !== null) {
+      this.status = args.status;
+    }
+    if (args.pid !== undefined && args.pid !== null) {
+      this.pid = args.pid;
+    }
+  }
+};
+RoleService_update_args.prototype = {};
+RoleService_update_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I64) {
+        this.id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.BOOL) {
+        this.status = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I64) {
+        this.pid = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_update_args.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_update_args');
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I64, 1);
+    output.writeI64(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 2);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.status !== null && this.status !== undefined) {
+    output.writeFieldBegin('status', Thrift.Type.BOOL, 3);
+    output.writeBool(this.status);
+    output.writeFieldEnd();
+  }
+  if (this.pid !== null && this.pid !== undefined) {
+    output.writeFieldBegin('pid', Thrift.Type.I64, 4);
+    output.writeI64(this.pid);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_update_result = function(args) {
+  this.success = null;
+  this.ex = null;
+  if (args instanceof PublicStruct_ttypes.InvalidOperation) {
+    this.ex = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex !== undefined && args.ex !== null) {
+      this.ex = args.ex;
+    }
+  }
+};
+RoleService_update_result.prototype = {};
+RoleService_update_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex = new PublicStruct_ttypes.InvalidOperation();
+        this.ex.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_update_result.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_update_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_updateStatus_args = function(args) {
+  this.ids = null;
+  this.status = null;
+  if (args) {
+    if (args.ids !== undefined && args.ids !== null) {
+      this.ids = Thrift.copyList(args.ids, [null]);
+    }
+    if (args.status !== undefined && args.status !== null) {
+      this.status = args.status;
+    }
+  }
+};
+RoleService_updateStatus_args.prototype = {};
+RoleService_updateStatus_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.LIST) {
+        var _size8 = 0;
+        var _rtmp312;
+        this.ids = [];
+        var _etype11 = 0;
+        _rtmp312 = input.readListBegin();
+        _etype11 = _rtmp312.etype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
+        {
+          var elem14 = null;
+          elem14 = input.readI64();
+          this.ids.push(elem14);
+        }
+        input.readListEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.BOOL) {
+        this.status = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_updateStatus_args.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_updateStatus_args');
+  if (this.ids !== null && this.ids !== undefined) {
+    output.writeFieldBegin('ids', Thrift.Type.LIST, 1);
+    output.writeListBegin(Thrift.Type.I64, this.ids.length);
+    for (var iter15 in this.ids)
+    {
+      if (this.ids.hasOwnProperty(iter15))
+      {
+        iter15 = this.ids[iter15];
+        output.writeI64(iter15);
+      }
+    }
+    output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.status !== null && this.status !== undefined) {
+    output.writeFieldBegin('status', Thrift.Type.BOOL, 2);
+    output.writeBool(this.status);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoleService_updateStatus_result = function(args) {
+  this.success = null;
+  this.ex = null;
+  if (args instanceof PublicStruct_ttypes.InvalidOperation) {
+    this.ex = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex !== undefined && args.ex !== null) {
+      this.ex = args.ex;
+    }
+  }
+};
+RoleService_updateStatus_result.prototype = {};
+RoleService_updateStatus_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex = new PublicStruct_ttypes.InvalidOperation();
+        this.ex.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoleService_updateStatus_result.prototype.write = function(output) {
+  output.writeStructBegin('RoleService_updateStatus_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
+    output.writeFieldEnd();
+  }
   output.writeFieldStop();
   output.writeStructEnd();
   return;
@@ -151,7 +609,7 @@ RoleServiceClient = exports.Client = function(output, pClass) {
 RoleServiceClient.prototype = {};
 RoleServiceClient.prototype.seqid = function() { return this._seqid; }
 RoleServiceClient.prototype.new_seqid = function() { return this._seqid += 1; }
-RoleServiceClient.prototype.roles = function(id, callback) {
+RoleServiceClient.prototype.roles = function(callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -162,19 +620,18 @@ RoleServiceClient.prototype.roles = function(id, callback) {
         _defer.resolve(result);
       }
     };
-    this.send_roles(id);
+    this.send_roles();
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_roles(id);
+    this.send_roles();
   }
 };
 
-RoleServiceClient.prototype.send_roles = function(id) {
+RoleServiceClient.prototype.send_roles = function() {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('roles', Thrift.MessageType.CALL, this.seqid());
   var args = new RoleService_roles_args();
-  args.id = id;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
@@ -193,10 +650,168 @@ RoleServiceClient.prototype.recv_roles = function(input,mtype,rseqid) {
   result.read(input);
   input.readMessageEnd();
 
+  if (null !== result.ex) {
+    return callback(result.ex);
+  }
   if (null !== result.success) {
     return callback(null, result.success);
   }
   return callback('roles failed: unknown result');
+};
+RoleServiceClient.prototype.add = function(name, pid, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_add(name, pid);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_add(name, pid);
+  }
+};
+
+RoleServiceClient.prototype.send_add = function(name, pid) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('add', Thrift.MessageType.CALL, this.seqid());
+  var args = new RoleService_add_args();
+  args.name = name;
+  args.pid = pid;
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+RoleServiceClient.prototype.recv_add = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new RoleService_add_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex) {
+    return callback(result.ex);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('add failed: unknown result');
+};
+RoleServiceClient.prototype.update = function(id, name, status, pid, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_update(id, name, status, pid);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_update(id, name, status, pid);
+  }
+};
+
+RoleServiceClient.prototype.send_update = function(id, name, status, pid) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('update', Thrift.MessageType.CALL, this.seqid());
+  var args = new RoleService_update_args();
+  args.id = id;
+  args.name = name;
+  args.status = status;
+  args.pid = pid;
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+RoleServiceClient.prototype.recv_update = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new RoleService_update_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex) {
+    return callback(result.ex);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('update failed: unknown result');
+};
+RoleServiceClient.prototype.updateStatus = function(ids, status, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_updateStatus(ids, status);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_updateStatus(ids, status);
+  }
+};
+
+RoleServiceClient.prototype.send_updateStatus = function(ids, status) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('updateStatus', Thrift.MessageType.CALL, this.seqid());
+  var args = new RoleService_updateStatus_args();
+  args.ids = ids;
+  args.status = status;
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+RoleServiceClient.prototype.recv_updateStatus = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new RoleService_updateStatus_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex) {
+    return callback(result.ex);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('updateStatus failed: unknown result');
 };
 RoleServiceProcessor = exports.Processor = function(handler) {
   this._handler = handler
@@ -220,8 +835,8 @@ RoleServiceProcessor.prototype.process_roles = function(seqid, input, output) {
   var args = new RoleService_roles_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.roles.length === 1) {
-    Q.fcall(this._handler.roles, args.id)
+  if (this._handler.roles.length === 0) {
+    Q.fcall(this._handler.roles)
       .then(function(result) {
         var result = new RoleService_roles_result({success: result});
         output.writeMessageBegin("roles", Thrift.MessageType.REPLY, seqid);
@@ -229,20 +844,145 @@ RoleServiceProcessor.prototype.process_roles = function(seqid, input, output) {
         output.writeMessageEnd();
         output.flush();
       }, function (err) {
-        var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-        output.writeMessageBegin("roles", Thrift.MessageType.EXCEPTION, seqid);
+        if (err instanceof PublicStruct_ttypes.InvalidOperation) {
+          var result = new RoleService_roles_result(err);
+          output.writeMessageBegin("roles", Thrift.MessageType.REPLY, seqid);
+        } else {
+          var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("roles", Thrift.MessageType.EXCEPTION, seqid);
+        }
         result.write(output);
         output.writeMessageEnd();
         output.flush();
       });
   } else {
-    this._handler.roles(args.id, function (err, result) {
-      if (err == null) {
+    this._handler.roles(function (err, result) {
+      if (err == null || err instanceof PublicStruct_ttypes.InvalidOperation) {
         var result = new RoleService_roles_result((err != null ? err : {success: result}));
         output.writeMessageBegin("roles", Thrift.MessageType.REPLY, seqid);
       } else {
         var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("roles", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+}
+
+RoleServiceProcessor.prototype.process_add = function(seqid, input, output) {
+  var args = new RoleService_add_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.add.length === 2) {
+    Q.fcall(this._handler.add, args.name, args.pid)
+      .then(function(result) {
+        var result = new RoleService_add_result({success: result});
+        output.writeMessageBegin("add", Thrift.MessageType.REPLY, seqid);
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        if (err instanceof PublicStruct_ttypes.InvalidOperation) {
+          var result = new RoleService_add_result(err);
+          output.writeMessageBegin("add", Thrift.MessageType.REPLY, seqid);
+        } else {
+          var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("add", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.add(args.name, args.pid, function (err, result) {
+      if (err == null || err instanceof PublicStruct_ttypes.InvalidOperation) {
+        var result = new RoleService_add_result((err != null ? err : {success: result}));
+        output.writeMessageBegin("add", Thrift.MessageType.REPLY, seqid);
+      } else {
+        var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("add", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+}
+
+RoleServiceProcessor.prototype.process_update = function(seqid, input, output) {
+  var args = new RoleService_update_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.update.length === 4) {
+    Q.fcall(this._handler.update, args.id, args.name, args.status, args.pid)
+      .then(function(result) {
+        var result = new RoleService_update_result({success: result});
+        output.writeMessageBegin("update", Thrift.MessageType.REPLY, seqid);
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        if (err instanceof PublicStruct_ttypes.InvalidOperation) {
+          var result = new RoleService_update_result(err);
+          output.writeMessageBegin("update", Thrift.MessageType.REPLY, seqid);
+        } else {
+          var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("update", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.update(args.id, args.name, args.status, args.pid, function (err, result) {
+      if (err == null || err instanceof PublicStruct_ttypes.InvalidOperation) {
+        var result = new RoleService_update_result((err != null ? err : {success: result}));
+        output.writeMessageBegin("update", Thrift.MessageType.REPLY, seqid);
+      } else {
+        var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("update", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+}
+
+RoleServiceProcessor.prototype.process_updateStatus = function(seqid, input, output) {
+  var args = new RoleService_updateStatus_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.updateStatus.length === 2) {
+    Q.fcall(this._handler.updateStatus, args.ids, args.status)
+      .then(function(result) {
+        var result = new RoleService_updateStatus_result({success: result});
+        output.writeMessageBegin("updateStatus", Thrift.MessageType.REPLY, seqid);
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        if (err instanceof PublicStruct_ttypes.InvalidOperation) {
+          var result = new RoleService_updateStatus_result(err);
+          output.writeMessageBegin("updateStatus", Thrift.MessageType.REPLY, seqid);
+        } else {
+          var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("updateStatus", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.updateStatus(args.ids, args.status, function (err, result) {
+      if (err == null || err instanceof PublicStruct_ttypes.InvalidOperation) {
+        var result = new RoleService_updateStatus_result((err != null ? err : {success: result}));
+        output.writeMessageBegin("updateStatus", Thrift.MessageType.REPLY, seqid);
+      } else {
+        var result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("updateStatus", Thrift.MessageType.EXCEPTION, seqid);
       }
       result.write(output);
       output.writeMessageEnd();

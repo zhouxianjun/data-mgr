@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.RoleMapper">
+    <update id="updateStatus">
+        UPDATE t_role SET  `status` = #{status} WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateChildStatus">
+        UPDATE t_role SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)
+    </update>
+</mapper>

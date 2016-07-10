@@ -23,6 +23,8 @@ public class Role implements Serializable {
 
     private String name;
 
+    private String pids;
+
     private Boolean status;
 
     private Date create_time;

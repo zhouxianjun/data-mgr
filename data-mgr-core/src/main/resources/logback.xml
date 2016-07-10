@@ -124,6 +124,14 @@
 	<logger name="statisticsThreadLog" level="${filter.logback.level}" additivity="false">
 		<appender-ref ref="STATISTICSTHREADASYNC" />
 	</logger>
+	<logger name="org.apache.zookeeper.ClientCnxn" level="INFO" additivity="false">
+		<appender-ref ref="ASYNC"/>
+		<appender-ref ref="stdout"/>
+	</logger>
+	<logger name="org.apache.thrift" level="${filter.logback.level}">
+		<appender-ref ref="ASYNC"/>
+		<appender-ref ref="stdout"/>
+	</logger>
 
 	<root level="${filter.logback.level}">
 		<appender-ref ref="stdout" />
