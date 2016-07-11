@@ -1,10 +1,11 @@
 package com.alone.core.mapper;
 
 import com.alone.common.entity.Role;
-import com.github.abel533.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author zhouxianjun(Alone)
@@ -18,4 +19,8 @@ public interface RoleMapper extends Mapper<Role> {
     Integer updateChildStatus(@Param("pid") Long pid, @Param("status") Boolean status);
 
     List<Role> listByUser(@Param("user") Long user);
+
+    Set<Long> getSameIncludeMenuOfExcludeSelf(@Param("user") Long user, @Param("role") Long role, @Param("include") String include);
+
+    Integer deleteRoleChildrenMenus(@Param("user") Long user, @Param("role") Long role, @Param("menus") String menus);
 }

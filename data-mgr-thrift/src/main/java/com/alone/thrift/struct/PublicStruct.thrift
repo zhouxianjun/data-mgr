@@ -5,7 +5,8 @@ struct RoleStruct {
     3: i64 pid,
     5: i64 create_time,
     6: i64 update_time,
-    7: bool status
+    7: bool status,
+    8: optional bool ow
 }
 struct MenuStruct {
     1: i64 id,
@@ -17,7 +18,8 @@ struct MenuStruct {
     7: i64 create_time,
     8: optional string path,
     9: string target,
-    10: optional string icon
+    10: optional string icon,
+    11: optional bool ow
 }
 struct InterfaceStruct {
     1: i64 id,

@@ -16,6 +16,7 @@ RoleStruct = module.exports.RoleStruct = function(args) {
   this.create_time = null;
   this.update_time = null;
   this.status = null;
+  this.ow = null;
   if (args) {
     if (args.id !== undefined && args.id !== null) {
       this.id = args.id;
@@ -34,6 +35,9 @@ RoleStruct = module.exports.RoleStruct = function(args) {
     }
     if (args.status !== undefined && args.status !== null) {
       this.status = args.status;
+    }
+    if (args.ow !== undefined && args.ow !== null) {
+      this.ow = args.ow;
     }
   }
 };
@@ -93,6 +97,13 @@ RoleStruct.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 8:
+      if (ftype == Thrift.Type.BOOL) {
+        this.ow = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -134,6 +145,11 @@ RoleStruct.prototype.write = function(output) {
     output.writeBool(this.status);
     output.writeFieldEnd();
   }
+  if (this.ow !== null && this.ow !== undefined) {
+    output.writeFieldBegin('ow', Thrift.Type.BOOL, 8);
+    output.writeBool(this.ow);
+    output.writeFieldEnd();
+  }
   output.writeFieldStop();
   output.writeStructEnd();
   return;
@@ -150,6 +166,7 @@ MenuStruct = module.exports.MenuStruct = function(args) {
   this.path = null;
   this.target = null;
   this.icon = null;
+  this.ow = null;
   if (args) {
     if (args.id !== undefined && args.id !== null) {
       this.id = args.id;
@@ -180,6 +197,9 @@ MenuStruct = module.exports.MenuStruct = function(args) {
     }
     if (args.icon !== undefined && args.icon !== null) {
       this.icon = args.icon;
+    }
+    if (args.ow !== undefined && args.ow !== null) {
+      this.ow = args.ow;
     }
   }
 };
@@ -267,6 +287,13 @@ MenuStruct.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 11:
+      if (ftype == Thrift.Type.BOOL) {
+        this.ow = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -326,6 +353,11 @@ MenuStruct.prototype.write = function(output) {
   if (this.icon !== null && this.icon !== undefined) {
     output.writeFieldBegin('icon', Thrift.Type.STRING, 10);
     output.writeString(this.icon);
+    output.writeFieldEnd();
+  }
+  if (this.ow !== null && this.ow !== undefined) {
+    output.writeFieldBegin('ow', Thrift.Type.BOOL, 11);
+    output.writeBool(this.ow);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

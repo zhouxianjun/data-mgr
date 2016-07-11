@@ -1,8 +1,8 @@
 package com.alone.core.mapper;
 
 import com.alone.common.entity.Menu;
-import com.github.abel533.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -18,4 +18,8 @@ public interface MenuMapper extends Mapper<Menu> {
     List<Menu> listByRole(@Param("role") Long role);
 
     Integer updateChildStatus(@Param("pid") Long pid, @Param("status") Boolean status);
+
+    Integer deleteMenu(@Param("id") Long id);
+
+    Integer deleteMenuInterface(@Param("id") Long id);
 }

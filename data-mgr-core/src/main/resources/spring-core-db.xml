@@ -83,7 +83,11 @@
 		<property name="typeAliasesPackage" value="com.alone.common.entity" />
 		<property name="typeHandlersPackage" value="com.alone.core.mapper.handler" />
 	</bean>
-	<bean id="coreMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<!--<bean id="coreMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.alone.core.mapper"/>
+		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory" />
+	</bean>-->
+	<bean id="coreMapperScanner" class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.alone.core.mapper"/>
 		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory" />
 	</bean>

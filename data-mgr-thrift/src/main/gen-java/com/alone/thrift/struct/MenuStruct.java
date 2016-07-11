@@ -48,6 +48,7 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
   private static final org.apache.thrift.protocol.TField PATH_FIELD_DESC = new org.apache.thrift.protocol.TField("path", org.apache.thrift.protocol.TType.STRING, (short)8);
   private static final org.apache.thrift.protocol.TField TARGET_FIELD_DESC = new org.apache.thrift.protocol.TField("target", org.apache.thrift.protocol.TType.STRING, (short)9);
   private static final org.apache.thrift.protocol.TField ICON_FIELD_DESC = new org.apache.thrift.protocol.TField("icon", org.apache.thrift.protocol.TType.STRING, (short)10);
+  private static final org.apache.thrift.protocol.TField OW_FIELD_DESC = new org.apache.thrift.protocol.TField("ow", org.apache.thrift.protocol.TType.BOOL, (short)11);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -65,6 +66,7 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
   private String path; // optional
   private String target; // required
   private String icon; // optional
+  private boolean ow; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -77,7 +79,8 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     CREATE_TIME((short)7, "create_time"),
     PATH((short)8, "path"),
     TARGET((short)9, "target"),
-    ICON((short)10, "icon");
+    ICON((short)10, "icon"),
+    OW((short)11, "ow");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -112,6 +115,8 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
           return TARGET;
         case 10: // ICON
           return ICON;
+        case 11: // OW
+          return OW;
         default:
           return null;
       }
@@ -157,8 +162,9 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
   private static final int __SEQ_ISSET_ID = 2;
   private static final int __STATUS_ISSET_ID = 3;
   private static final int __CREATE_TIME_ISSET_ID = 4;
+  private static final int __OW_ISSET_ID = 5;
   private byte __isset_bitfield = 0;
-  private static final _Fields optionals[] = {_Fields.DESCRIPTION,_Fields.PATH,_Fields.ICON};
+  private static final _Fields optionals[] = {_Fields.DESCRIPTION,_Fields.PATH,_Fields.ICON,_Fields.OW};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -182,6 +188,8 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.ICON, new org.apache.thrift.meta_data.FieldMetaData("icon", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.OW, new org.apache.thrift.meta_data.FieldMetaData("ow", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(MenuStruct.class, metaDataMap);
   }
@@ -238,6 +246,7 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     if (other.isSetIcon()) {
       this.icon = other.icon;
     }
+    this.ow = other.ow;
   }
 
   public MenuStruct deepCopy() {
@@ -261,6 +270,8 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     this.path = null;
     this.target = null;
     this.icon = null;
+    setOwIsSet(false);
+    this.ow = false;
   }
 
   public long getId() {
@@ -498,6 +509,29 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     }
   }
 
+  public boolean isOw() {
+    return this.ow;
+  }
+
+  public MenuStruct setOw(boolean ow) {
+    this.ow = ow;
+    setOwIsSet(true);
+    return this;
+  }
+
+  public void unsetOw() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __OW_ISSET_ID);
+  }
+
+  /** Returns true if field ow is set (has been assigned a value) and false otherwise */
+  public boolean isSetOw() {
+    return EncodingUtils.testBit(__isset_bitfield, __OW_ISSET_ID);
+  }
+
+  public void setOwIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __OW_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -580,6 +614,14 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       }
       break;
 
+    case OW:
+      if (value == null) {
+        unsetOw();
+      } else {
+        setOw((Boolean)value);
+      }
+      break;
+
     }
   }
 
@@ -615,6 +657,9 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     case ICON:
       return getIcon();
 
+    case OW:
+      return isOw();
+
     }
     throw new IllegalStateException();
   }
@@ -646,6 +691,8 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       return isSetTarget();
     case ICON:
       return isSetIcon();
+    case OW:
+      return isSetOw();
     }
     throw new IllegalStateException();
   }
@@ -753,6 +800,15 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
         return false;
     }
 
+    boolean this_present_ow = true && this.isSetOw();
+    boolean that_present_ow = true && that.isSetOw();
+    if (this_present_ow || that_present_ow) {
+      if (!(this_present_ow && that_present_ow))
+        return false;
+      if (this.ow != that.ow)
+        return false;
+    }
+
     return true;
   }
 
@@ -809,6 +865,11 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
     list.add(present_icon);
     if (present_icon)
       list.add(icon);
+
+    boolean present_ow = true && (isSetOw());
+    list.add(present_ow);
+    if (present_ow)
+      list.add(ow);
 
     return list.hashCode();
   }
@@ -921,6 +982,16 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetOw()).compareTo(other.isSetOw());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOw()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ow, other.ow);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1004,6 +1075,12 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       } else {
         sb.append(this.icon);
       }
+      first = false;
+    }
+    if (isSetOw()) {
+      if (!first) sb.append(", ");
+      sb.append("ow:");
+      sb.append(this.ow);
       first = false;
     }
     sb.append(")");
@@ -1131,6 +1208,14 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 11: // OW
+            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+              struct.ow = iprot.readBool();
+              struct.setOwIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -1192,6 +1277,11 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
           oprot.writeFieldEnd();
         }
       }
+      if (struct.isSetOw()) {
+        oprot.writeFieldBegin(OW_FIELD_DESC);
+        oprot.writeBool(struct.ow);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1240,7 +1330,10 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       if (struct.isSetIcon()) {
         optionals.set(9);
       }
-      oprot.writeBitSet(optionals, 10);
+      if (struct.isSetOw()) {
+        optionals.set(10);
+      }
+      oprot.writeBitSet(optionals, 11);
       if (struct.isSetId()) {
         oprot.writeI64(struct.id);
       }
@@ -1271,12 +1364,15 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       if (struct.isSetIcon()) {
         oprot.writeString(struct.icon);
       }
+      if (struct.isSetOw()) {
+        oprot.writeBool(struct.ow);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, MenuStruct struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(10);
+      BitSet incoming = iprot.readBitSet(11);
       if (incoming.get(0)) {
         struct.id = iprot.readI64();
         struct.setIdIsSet(true);
@@ -1316,6 +1412,10 @@ public class MenuStruct implements org.apache.thrift.TBase<MenuStruct, MenuStruc
       if (incoming.get(9)) {
         struct.icon = iprot.readString();
         struct.setIconIsSet(true);
+      }
+      if (incoming.get(10)) {
+        struct.ow = iprot.readBool();
+        struct.setOwIsSet(true);
       }
     }
   }

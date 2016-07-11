@@ -1,17 +1,18 @@
 package com.alone.core.service.impl;
 
 import com.alone.common.entity.Menu;
+import com.alone.common.entity.MenuInterface;
 import com.alone.common.util.Utils;
-import com.alone.core.mapper.InterfaceMapper;
+import com.alone.core.mapper.MenuInterfaceMapper;
 import com.alone.core.mapper.MenuMapper;
 import com.alone.thrift.service.MenuService;
-import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.MenuStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +30,12 @@ public class MenuServiceImpl implements MenuService.Iface {
     @Autowired
     private MenuMapper menuMapper;
     @Autowired
-    private InterfaceMapper interfaceMapper;
+    private MenuInterfaceMapper menuInterfaceMapper;
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<MenuStruct> menus() throws TException {
-        List<Menu> menus = menuMapper.select(null);
+        List<Menu> menus = menuMapper.selectAll();
         return getMenuStructs(menus);
     }
 
@@ -46,10 +47,21 @@ public class MenuServiceImpl implements MenuService.Iface {
     }
 
     @Override
-    public List<MenuStruct> menusBySetRole(long user, long role) throws InvalidOperation, TException {
+    public List<MenuStruct> menusBySetRole(long user, long role) throws TException {
         List<Menu> userMenus = menuMapper.listByUser(user);
         List<Menu> roleMenus = menuMapper.listByRole(role);
-        return null;
+        List<MenuStruct> result = getMenuStructs(userMenus);
+        for (MenuStruct userMenu : result) {
+            boolean ow = false;
+            for (Menu roleMenu : roleMenus) {
+                if (roleMenu.getId() == userMenu.getId()) {
+                    ow = true;
+                    break;
+                }
+            }
+            userMenu.setOw(ow);
+        }
+        return result;
     }
 
     @Override
@@ -75,13 +87,25 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     public boolean delMenu(long id) throws TException {
-
-        return false;
+        menuMapper.deleteMenu(id);
+        menuMapper.deleteMenuInterface(id);
+        return true;
     }
 
     @Override
-    public boolean setInterfaces(long menu, long user, List<Long> interfaces) throws InvalidOperation, TException {
-        return false;
+    public boolean setInterfaces(long menu, long user, List<Long> interfaces) throws TException {
+        Example example = new Example(MenuInterface.class);
+        example.createCriteria().andEqualTo("menu_id", menu);
+        menuInterfaceMapper.deleteByExample(example);
+        int count = 0;
+        for (Long anInterface : interfaces) {
+            MenuInterface menuInterface = new MenuInterface();
+            menuInterface.setMenu_id(menu);
+            menuInterface.setInterface_id(anInterface);
+            menuInterface.setCreate_time(new Date());
+            count += menuInterfaceMapper.insert(menuInterface);
+        }
+        return count == interfaces.size();
     }
 
     private List<MenuStruct> getMenuStructs(List<Menu> menus) {

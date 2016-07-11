@@ -44,6 +44,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private static final org.apache.thrift.protocol.TField CREATE_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("create_time", org.apache.thrift.protocol.TType.I64, (short)5);
   private static final org.apache.thrift.protocol.TField UPDATE_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("update_time", org.apache.thrift.protocol.TType.I64, (short)6);
   private static final org.apache.thrift.protocol.TField STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("status", org.apache.thrift.protocol.TType.BOOL, (short)7);
+  private static final org.apache.thrift.protocol.TField OW_FIELD_DESC = new org.apache.thrift.protocol.TField("ow", org.apache.thrift.protocol.TType.BOOL, (short)8);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -57,6 +58,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private long create_time; // required
   private long update_time; // required
   private boolean status; // required
+  private boolean ow; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -65,7 +67,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     PID((short)3, "pid"),
     CREATE_TIME((short)5, "create_time"),
     UPDATE_TIME((short)6, "update_time"),
-    STATUS((short)7, "status");
+    STATUS((short)7, "status"),
+    OW((short)8, "ow");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -92,6 +95,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
           return UPDATE_TIME;
         case 7: // STATUS
           return STATUS;
+        case 8: // OW
+          return OW;
         default:
           return null;
       }
@@ -137,7 +142,9 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private static final int __CREATE_TIME_ISSET_ID = 2;
   private static final int __UPDATE_TIME_ISSET_ID = 3;
   private static final int __STATUS_ISSET_ID = 4;
+  private static final int __OW_ISSET_ID = 5;
   private byte __isset_bitfield = 0;
+  private static final _Fields optionals[] = {_Fields.OW};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -152,6 +159,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     tmpMap.put(_Fields.UPDATE_TIME, new org.apache.thrift.meta_data.FieldMetaData("update_time", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     tmpMap.put(_Fields.STATUS, new org.apache.thrift.meta_data.FieldMetaData("status", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+    tmpMap.put(_Fields.OW, new org.apache.thrift.meta_data.FieldMetaData("ow", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(RoleStruct.class, metaDataMap);
@@ -195,6 +204,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     this.create_time = other.create_time;
     this.update_time = other.update_time;
     this.status = other.status;
+    this.ow = other.ow;
   }
 
   public RoleStruct deepCopy() {
@@ -214,6 +224,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     this.update_time = 0;
     setStatusIsSet(false);
     this.status = false;
+    setOwIsSet(false);
+    this.ow = false;
   }
 
   public long getId() {
@@ -355,6 +367,29 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __STATUS_ISSET_ID, value);
   }
 
+  public boolean isOw() {
+    return this.ow;
+  }
+
+  public RoleStruct setOw(boolean ow) {
+    this.ow = ow;
+    setOwIsSet(true);
+    return this;
+  }
+
+  public void unsetOw() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __OW_ISSET_ID);
+  }
+
+  /** Returns true if field ow is set (has been assigned a value) and false otherwise */
+  public boolean isSetOw() {
+    return EncodingUtils.testBit(__isset_bitfield, __OW_ISSET_ID);
+  }
+
+  public void setOwIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __OW_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -405,6 +440,14 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       }
       break;
 
+    case OW:
+      if (value == null) {
+        unsetOw();
+      } else {
+        setOw((Boolean)value);
+      }
+      break;
+
     }
   }
 
@@ -427,6 +470,9 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
 
     case STATUS:
       return isStatus();
+
+    case OW:
+      return isOw();
 
     }
     throw new IllegalStateException();
@@ -451,6 +497,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       return isSetUpdate_time();
     case STATUS:
       return isSetStatus();
+    case OW:
+      return isSetOw();
     }
     throw new IllegalStateException();
   }
@@ -522,6 +570,15 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         return false;
     }
 
+    boolean this_present_ow = true && this.isSetOw();
+    boolean that_present_ow = true && that.isSetOw();
+    if (this_present_ow || that_present_ow) {
+      if (!(this_present_ow && that_present_ow))
+        return false;
+      if (this.ow != that.ow)
+        return false;
+    }
+
     return true;
   }
 
@@ -558,6 +615,11 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     list.add(present_status);
     if (present_status)
       list.add(status);
+
+    boolean present_ow = true && (isSetOw());
+    list.add(present_ow);
+    if (present_ow)
+      list.add(ow);
 
     return list.hashCode();
   }
@@ -630,6 +692,16 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetOw()).compareTo(other.isSetOw());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOw()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ow, other.ow);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -677,6 +749,12 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     sb.append("status:");
     sb.append(this.status);
     first = false;
+    if (isSetOw()) {
+      if (!first) sb.append(", ");
+      sb.append("ow:");
+      sb.append(this.ow);
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
@@ -770,6 +848,14 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 8: // OW
+            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+              struct.ow = iprot.readBool();
+              struct.setOwIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -805,6 +891,11 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       oprot.writeFieldBegin(STATUS_FIELD_DESC);
       oprot.writeBool(struct.status);
       oprot.writeFieldEnd();
+      if (struct.isSetOw()) {
+        oprot.writeFieldBegin(OW_FIELD_DESC);
+        oprot.writeBool(struct.ow);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -841,7 +932,10 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (struct.isSetStatus()) {
         optionals.set(5);
       }
-      oprot.writeBitSet(optionals, 6);
+      if (struct.isSetOw()) {
+        optionals.set(6);
+      }
+      oprot.writeBitSet(optionals, 7);
       if (struct.isSetId()) {
         oprot.writeI64(struct.id);
       }
@@ -860,12 +954,15 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (struct.isSetStatus()) {
         oprot.writeBool(struct.status);
       }
+      if (struct.isSetOw()) {
+        oprot.writeBool(struct.ow);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, RoleStruct struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(6);
+      BitSet incoming = iprot.readBitSet(7);
       if (incoming.get(0)) {
         struct.id = iprot.readI64();
         struct.setIdIsSet(true);
@@ -889,6 +986,10 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (incoming.get(5)) {
         struct.status = iprot.readBool();
         struct.setStatusIsSet(true);
+      }
+      if (incoming.get(6)) {
+        struct.ow = iprot.readBool();
+        struct.setOwIsSet(true);
       }
     }
   }

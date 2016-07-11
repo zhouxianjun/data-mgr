@@ -1,8 +1,12 @@
 package com.alone.core.service.impl;
 
+import com.alone.common.entity.Menu;
 import com.alone.common.entity.Role;
+import com.alone.common.entity.RoleMenu;
 import com.alone.common.util.Utils;
+import com.alone.core.mapper.MenuMapper;
 import com.alone.core.mapper.RoleMapper;
+import com.alone.core.mapper.RoleMenuMapper;
 import com.alone.thrift.service.RoleService;
 import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.RoleStruct;
@@ -13,10 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zhouxianjun(Alone)
@@ -30,30 +33,40 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService.Iface {
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+    @Autowired
+    private MenuMapper menuMapper;
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<RoleStruct> roles() throws TException {
-        List<Role> roles = roleMapper.select(null);
-        List<RoleStruct> result = new ArrayList<>();
-        if (roles != null && !roles.isEmpty()) {
-            for (Role role : roles) {
-                result.add(Utils.java2Thrift(new RoleStruct()
-                        .setCreate_time(role.getCreate_time().getTime())
-                        .setUpdate_time(role.getUpdate_time().getTime()), role));
+        List<Role> roles = roleMapper.selectAll();
+        return getRoleStructs(roles);
+    }
+
+    @Override
+    public List<RoleStruct> rolesByUser(long user) throws TException {
+        List<Role> roles = roleMapper.listByUser(user);
+        return getRoleStructs(roles);
+    }
+
+    @Override
+    public List<RoleStruct> rolesBySetUser(long user, long parent) throws TException {
+        List<Role> parentRoles = roleMapper.listByUser(parent);
+        List<Role> userRoles = roleMapper.listByUser(user);
+        List<RoleStruct> result = getRoleStructs(parentRoles);
+        for (RoleStruct struct : result) {
+            boolean ow = false;
+            for (Role userRole : userRoles) {
+                if (userRole.getId() == struct.getId()) {
+                    ow = true;
+                    break;
+                }
             }
+            struct.setOw(ow);
         }
         return result;
-    }
-
-    @Override
-    public List<RoleStruct> rolesByUser(long user) throws InvalidOperation, TException {
-        return null;
-    }
-
-    @Override
-    public List<RoleStruct> rolesBySetUser(long user, long parent) throws InvalidOperation, TException {
-        return null;
     }
 
     @Override
@@ -83,18 +96,109 @@ public class RoleServiceImpl implements RoleService.Iface {
         role.setPid(pid);
         role.setStatus(status);
         role.setUpdate_time(new Date());
-        roleMapper.updateByPrimaryKeySelective(role);
-        return true;
+        return roleMapper.updateByPrimaryKeySelective(role) > 0;
     }
 
     @Override
     public boolean updateStatus(List<Long> ids, boolean status) throws TException {
-        roleMapper.updateStatus(ids.toArray(new Long[ids.size()]), status);
-        return true;
+        return roleMapper.updateStatus(ids.toArray(new Long[ids.size()]), status) > 0;
     }
 
     @Override
-    public boolean setMenus(long role, long user, List<Long> menus) throws InvalidOperation, TException {
-        return false;
+    public boolean setMenus(long role, long user, List<Long> menus) throws TException {
+        //验证功能点是否超权限
+        List<Menu> userMenus = menuMapper.listByRole(user);
+        List<Menu> oldMenus = menuMapper.listByRole(role);
+        for (Long menu : menus) {
+            boolean have = false;
+            for (Menu userMenu : userMenus) {
+                if (userMenu.getId().longValue() == menu.longValue()) {
+                    have = true;
+                    break;
+                }
+            }
+            if (!have) {
+                throw new InvalidOperation(500, "菜单超出当前用户权限");
+            }
+        }
+        Example example = new Example(RoleMenu.class);
+        example.createCriteria().andEqualTo("role_id", role);
+        roleMenuMapper.deleteByExample(example);
+        int count = 0;
+        for (Long menu : menus) {
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setMenu_id(menu);
+            roleMenu.setRole_id(role);
+            roleMenu.setCreate_time(new Date());
+            count += roleMenuMapper.insert(roleMenu);
+        }
+        /*
+        * 清理权限
+		* 1、查询出之前的menus
+		* 2、现在的和之前的对比出 新增与收回功能点
+		* 3、获取当前用户所有角色(不包含当前更新角色)，依次判断被收回的菜单是否存在
+		* 4、如果存在则不做处理
+		* 5、如果不存在，则做回收处理。
+		* */
+        //现在的和之前的对比出收回功能点
+        Set<Long> back = new HashSet<>();
+        StringBuilder backString = new StringBuilder();
+        for (Menu oldMenu : oldMenus) {
+            boolean have = false;
+            for (Long menu : menus) {
+                if (oldMenu.getId().longValue() == menu.longValue()) {
+                    have = true;
+                    break;
+                }
+            }
+            if (!have) {
+                back.add(oldMenu.getId());
+                backString.append(oldMenu.getId()).append(",");
+            }
+        }
+        //有回收功能点
+        if (!back.isEmpty()) {
+            backString.deleteCharAt(backString.length() - 1);
+            //获取当前用户所有角色(不包含当前更新角色)，依次判断被收回的功能点是否存在
+            Set<Long> includes = roleMapper.getSameIncludeMenuOfExcludeSelf(user, role, backString.toString());
+            if (includes != null && !includes.isEmpty()) {
+                Iterator<Long> iterator = back.iterator();
+                while (iterator.hasNext()) {
+                    boolean have = false;
+                    Long next = iterator.next();
+                    for (Long include : includes) {
+                        if (include.longValue() == next) {
+                            have = true;
+                            break;
+                        }
+                    }
+                    if (have) {
+                        iterator.remove();
+                    }
+                }
+            }
+
+            if (!back.isEmpty()) {
+                StringBuilder str = new StringBuilder();
+                for (Long aLong : back) {
+                    str.append(aLong).append(",");
+                }
+                str.deleteCharAt(str.length() - 1);
+                roleMapper.deleteRoleChildrenMenus(user, role, str.toString());
+            }
+        }
+        return count == menus.size();
+    }
+
+    private List<RoleStruct> getRoleStructs(List<Role> roles) {
+        List<RoleStruct> result = new ArrayList<>();
+        if (roles != null && !roles.isEmpty()) {
+            for (Role role : roles) {
+                result.add(Utils.java2Thrift(new RoleStruct()
+                        .setCreate_time(role.getCreate_time().getTime())
+                        .setUpdate_time(role.getUpdate_time().getTime()), role));
+            }
+        }
+        return result;
     }
 }
