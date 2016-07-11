@@ -19,13 +19,29 @@ public class User implements Serializable {
     @Id
     private Long id;
 
+    private Long pid;
+
     private String username;
 
     private String password;
 
     private String name;
 
+    private String real_name;
+
+    private String company;
+
+    private Integer city_id;
+
+    private Integer province_id;
+
+    private String email;
+
+    private String phone;
+
     private Date create_time;
 
     private Boolean status;
+
+    private String pids;
 }

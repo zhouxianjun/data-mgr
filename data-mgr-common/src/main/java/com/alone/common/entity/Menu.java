@@ -36,4 +36,6 @@ public class Menu implements Serializable {
     private String target;
 
     private String icon;
+
+    private String pids;
 }

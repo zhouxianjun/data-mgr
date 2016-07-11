@@ -14,4 +14,8 @@ import java.util.List;
  */
 public interface MenuMapper extends Mapper<Menu> {
     List<Menu> listByUser(@Param("user") Long user);
+
+    List<Menu> listByRole(@Param("role") Long role);
+
+    Integer updateChildStatus(@Param("pid") Long pid, @Param("status") Boolean status);
 }

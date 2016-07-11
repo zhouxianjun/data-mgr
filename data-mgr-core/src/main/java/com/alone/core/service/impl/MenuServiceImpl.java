@@ -5,6 +5,7 @@ import com.alone.common.util.Utils;
 import com.alone.core.mapper.InterfaceMapper;
 import com.alone.core.mapper.MenuMapper;
 import com.alone.thrift.service.MenuService;
+import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.MenuStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
@@ -45,6 +46,13 @@ public class MenuServiceImpl implements MenuService.Iface {
     }
 
     @Override
+    public List<MenuStruct> menusBySetRole(long user, long role) throws InvalidOperation, TException {
+        List<Menu> userMenus = menuMapper.listByUser(user);
+        List<Menu> roleMenus = menuMapper.listByRole(role);
+        return null;
+    }
+
+    @Override
     public long add(MenuStruct menu) throws TException {
         Menu m = new Menu();
         Utils.java2Thrift(m, menu);
@@ -68,6 +76,11 @@ public class MenuServiceImpl implements MenuService.Iface {
     @Override
     public boolean delMenu(long id) throws TException {
 
+        return false;
+    }
+
+    @Override
+    public boolean setInterfaces(long menu, long user, List<Long> interfaces) throws InvalidOperation, TException {
         return false;
     }
 

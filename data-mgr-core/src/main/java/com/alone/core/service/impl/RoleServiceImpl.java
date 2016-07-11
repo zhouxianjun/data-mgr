@@ -47,6 +47,16 @@ public class RoleServiceImpl implements RoleService.Iface {
     }
 
     @Override
+    public List<RoleStruct> rolesByUser(long user) throws InvalidOperation, TException {
+        return null;
+    }
+
+    @Override
+    public List<RoleStruct> rolesBySetUser(long user, long parent) throws InvalidOperation, TException {
+        return null;
+    }
+
+    @Override
     public long add(String name, long pid) throws TException {
         Role parent = roleMapper.selectByPrimaryKey(pid);
         Role role = new Role();
@@ -81,5 +91,10 @@ public class RoleServiceImpl implements RoleService.Iface {
     public boolean updateStatus(List<Long> ids, boolean status) throws TException {
         roleMapper.updateStatus(ids.toArray(new Long[ids.size()]), status);
         return true;
+    }
+
+    @Override
+    public boolean setMenus(long role, long user, List<Long> menus) throws InvalidOperation, TException {
+        return false;
     }
 }
