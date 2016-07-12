@@ -11,7 +11,28 @@
             t_menu m
         LEFT JOIN t_role_menu rm ON rm.menu_id = m.id
         LEFT JOIN t_user_role ur ON ur.role_id = rm.role_id
-        WHERE ur.user_id = #{user}
+        WHERE
+            ur.user_id = #{user}
+        UNION
+        SELECT
+            m.*
+        FROM
+            t_menu m LEFT JOIN
+            t_role_menu rm ON rm.menu_id = m.id LEFT JOIN
+            t_role r ON r.id = rm.role_id,
+            (
+                SELECT
+                    r.id
+                FROM
+                    t_role r
+                LEFT JOIN t_user_role ur ON ur.role_id = r.id
+                WHERE
+                    ur.user_id = #{user}
+            ) t
+        WHERE
+            FIND_IN_SET(t.id, r.pids)
+        GROUP BY
+            m.id
     </select>
     <select id="listByRole" resultType="Menu">
         SELECT
@@ -19,7 +40,12 @@
         FROM
             t_menu m
         LEFT JOIN t_role_menu rm ON rm.menu_id = m.id
-        WHERE rm.role_id = #{role}
+        LEFT JOIN t_role r ON r.id = rm.role_id
+        WHERE
+            FIND_IN_SET(#{role}, r.pids)
+        OR rm.role_id = #{role}
+        GROUP BY
+            m.id
     </select>
     <update id="updateChildStatus">
         UPDATE t_menu SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)

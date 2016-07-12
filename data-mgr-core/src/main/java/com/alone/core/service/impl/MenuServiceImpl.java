@@ -1,5 +1,6 @@
 package com.alone.core.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alone.common.entity.Menu;
 import com.alone.common.entity.MenuInterface;
 import com.alone.common.util.Utils;
@@ -47,6 +48,7 @@ public class MenuServiceImpl implements MenuService.Iface {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<MenuStruct> menusBySetRole(long user, long role) throws TException {
         List<Menu> userMenus = menuMapper.listByUser(user);
         List<Menu> roleMenus = menuMapper.listByRole(role);
@@ -66,23 +68,34 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     public long add(MenuStruct menu) throws TException {
+        String pids = "0";
+        if (menu.getPid() > 0) {
+            Menu parent = menuMapper.selectByPrimaryKey(menu.getPid());
+            pids = StringUtils.isEmpty(parent.getPids()) ? String.valueOf(parent.getId()) : parent.getId() + "," + parent.getPids();
+        }
         Menu m = new Menu();
         Utils.java2Thrift(m, menu);
         m.setId(Utils.generateUUID());
         m.setStatus(Boolean.TRUE);
         m.setCreate_time(new Date());
+        m.setPids(pids);
         menuMapper.insertSelective(m);
         return m.getId();
     }
 
     @Override
     public boolean update(MenuStruct menu) throws TException {
+        String pids = "0";
+        if (menu.getPid() > 0) {
+            Menu parent = menuMapper.selectByPrimaryKey(menu.getPid());
+            pids = StringUtils.isEmpty(parent.getPids()) ? String.valueOf(parent.getId()) : parent.getId() + "," + parent.getPids();
+        }
         Menu m = new Menu();
         Utils.java2Thrift(m, menu);
         if (m.getId() == null || m.getId() <= 0)
             return false;
-        menuMapper.updateByPrimaryKeySelective(m);
-        return true;
+        m.setPids(pids);
+        return menuMapper.updateByPrimaryKeySelective(m) > 0;
     }
 
     @Override

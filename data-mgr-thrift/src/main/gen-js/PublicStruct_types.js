@@ -373,6 +373,7 @@ InterfaceStruct = module.exports.InterfaceStruct = function(args) {
   this.seq = null;
   this.status = null;
   this.create_time = null;
+  this.ow = null;
   if (args) {
     if (args.id !== undefined && args.id !== null) {
       this.id = args.id;
@@ -394,6 +395,9 @@ InterfaceStruct = module.exports.InterfaceStruct = function(args) {
     }
     if (args.create_time !== undefined && args.create_time !== null) {
       this.create_time = args.create_time;
+    }
+    if (args.ow !== undefined && args.ow !== null) {
+      this.ow = args.ow;
     }
   }
 };
@@ -460,6 +464,13 @@ InterfaceStruct.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 8:
+      if (ftype == Thrift.Type.BOOL) {
+        this.ow = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -504,6 +515,11 @@ InterfaceStruct.prototype.write = function(output) {
   if (this.create_time !== null && this.create_time !== undefined) {
     output.writeFieldBegin('create_time', Thrift.Type.I64, 7);
     output.writeI64(this.create_time);
+    output.writeFieldEnd();
+  }
+  if (this.ow !== null && this.ow !== undefined) {
+    output.writeFieldBegin('ow', Thrift.Type.BOOL, 8);
+    output.writeBool(this.ow);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

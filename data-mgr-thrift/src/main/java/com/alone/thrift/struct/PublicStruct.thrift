@@ -28,7 +28,8 @@ struct InterfaceStruct {
     4: optional string description,
     5: i32 seq,
     6: bool status,
-    7: i64 create_time
+    7: i64 create_time,
+    8: optional bool ow
 }
 struct UserStruct {
     1: i64 id,

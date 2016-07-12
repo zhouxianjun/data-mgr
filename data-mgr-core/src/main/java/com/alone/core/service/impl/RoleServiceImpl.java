@@ -1,5 +1,6 @@
 package com.alone.core.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alone.common.entity.Menu;
 import com.alone.common.entity.Role;
 import com.alone.common.entity.RoleMenu;
@@ -16,7 +17,6 @@ import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -53,8 +53,11 @@ public class RoleServiceImpl implements RoleService.Iface {
 
     @Override
     public List<RoleStruct> rolesBySetUser(long user, long parent) throws TException {
-        List<Role> parentRoles = roleMapper.listByUser(parent);
-        List<Role> userRoles = roleMapper.listByUser(user);
+        if (user == parent) {
+            throw new InvalidOperation(500, "自己不能给自己设置角色");
+        }
+        List<Role> parentRoles = roleMapper.listChildByUser(parent);
+        List<Role> userRoles = roleMapper.listChildByUser(user);
         List<RoleStruct> result = getRoleStructs(parentRoles);
         for (RoleStruct struct : result) {
             boolean ow = false;
@@ -107,7 +110,7 @@ public class RoleServiceImpl implements RoleService.Iface {
     @Override
     public boolean setMenus(long role, long user, List<Long> menus) throws TException {
         //验证功能点是否超权限
-        List<Menu> userMenus = menuMapper.listByRole(user);
+        List<Menu> userMenus = menuMapper.listByUser(user);
         List<Menu> oldMenus = menuMapper.listByRole(role);
         for (Long menu : menus) {
             boolean have = false;
@@ -132,15 +135,8 @@ public class RoleServiceImpl implements RoleService.Iface {
             roleMenu.setCreate_time(new Date());
             count += roleMenuMapper.insert(roleMenu);
         }
-        /*
-        * 清理权限
-		* 1、查询出之前的menus
-		* 2、现在的和之前的对比出 新增与收回功能点
-		* 3、获取当前用户所有角色(不包含当前更新角色)，依次判断被收回的菜单是否存在
-		* 4、如果存在则不做处理
-		* 5、如果不存在，则做回收处理。
-		* */
-        //现在的和之前的对比出收回功能点
+
+        //清理权限
         Set<Long> back = new HashSet<>();
         StringBuilder backString = new StringBuilder();
         for (Menu oldMenu : oldMenus) {
@@ -159,33 +155,7 @@ public class RoleServiceImpl implements RoleService.Iface {
         //有回收功能点
         if (!back.isEmpty()) {
             backString.deleteCharAt(backString.length() - 1);
-            //获取当前用户所有角色(不包含当前更新角色)，依次判断被收回的功能点是否存在
-            Set<Long> includes = roleMapper.getSameIncludeMenuOfExcludeSelf(user, role, backString.toString());
-            if (includes != null && !includes.isEmpty()) {
-                Iterator<Long> iterator = back.iterator();
-                while (iterator.hasNext()) {
-                    boolean have = false;
-                    Long next = iterator.next();
-                    for (Long include : includes) {
-                        if (include.longValue() == next) {
-                            have = true;
-                            break;
-                        }
-                    }
-                    if (have) {
-                        iterator.remove();
-                    }
-                }
-            }
-
-            if (!back.isEmpty()) {
-                StringBuilder str = new StringBuilder();
-                for (Long aLong : back) {
-                    str.append(aLong).append(",");
-                }
-                str.deleteCharAt(str.length() - 1);
-                roleMapper.deleteRoleChildrenMenus(user, role, str.toString());
-            }
+            roleMapper.deleteRoleChildrenMenus(role, backString.toString());
         }
         return count == menus.size();
     }

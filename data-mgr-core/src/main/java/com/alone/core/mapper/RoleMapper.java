@@ -20,7 +20,7 @@ public interface RoleMapper extends Mapper<Role> {
 
     List<Role> listByUser(@Param("user") Long user);
 
-    Set<Long> getSameIncludeMenuOfExcludeSelf(@Param("user") Long user, @Param("role") Long role, @Param("include") String include);
+    List<Role> listChildByUser(@Param("user") Long user);
 
-    Integer deleteRoleChildrenMenus(@Param("user") Long user, @Param("role") Long role, @Param("menus") String menus);
+    Integer deleteRoleChildrenMenus(@Param("role") Long role, @Param("menus") String menus);
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.InterfaceMapper">
+    <select id="listByUser" resultType="Interface">
+        SELECT
+            i.*
+        FROM
+            t_interface i
+        LEFT JOIN t_menu_interface mi ON mi.interface_id = i.id
+        LEFT JOIN t_role_menu rm ON rm.menu_id = mi.menu_id
+        LEFT JOIN t_user_role ur ON ur.role_id = rm.role_id
+        WHERE
+            ur.user_id = #{user}
+        UNION
+        SELECT
+            i.*
+        FROM
+            t_interface i
+        LEFT JOIN t_menu_interface mi ON mi.interface_id = i.id
+        LEFT JOIN t_role_menu rm ON rm.menu_id = mi.menu_id
+        LEFT JOIN t_role r ON r.id = rm.role_id,
+         (
+            SELECT
+                r.id
+            FROM
+                t_role r
+            LEFT JOIN t_user_role ur ON ur.role_id = r.id
+            WHERE
+                ur.user_id = #{user}
+        ) t
+        WHERE
+            FIND_IN_SET(t.id, r.pids)
+        GROUP BY
+            i.id
+    </select>
+    <select id="listByMenu" resultType="Interface">
+        SELECT
+            i.*
+        FROM
+            t_interface i
+        LEFT JOIN t_menu_interface mi ON mi.interface_id = i.id
+        LEFT JOIN t_menu m ON m.id = mi.menu_id
+        WHERE
+            FIND_IN_SET(#{menu}, m.pids)
+        OR m.id = #{menu}
+        GROUP BY
+            i.id
+    </select>
+    <update id="updateChildStatus">
+        UPDATE t_interface SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)
+    </update>
+</mapper>
