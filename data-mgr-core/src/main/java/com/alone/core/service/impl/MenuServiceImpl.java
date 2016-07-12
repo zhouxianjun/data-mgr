@@ -7,6 +7,7 @@ import com.alone.common.util.Utils;
 import com.alone.core.mapper.MenuInterfaceMapper;
 import com.alone.core.mapper.MenuMapper;
 import com.alone.thrift.service.MenuService;
+import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.MenuStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
@@ -76,7 +77,6 @@ public class MenuServiceImpl implements MenuService.Iface {
         Menu m = new Menu();
         Utils.java2Thrift(m, menu);
         m.setId(Utils.generateUUID());
-        m.setStatus(Boolean.TRUE);
         m.setCreate_time(new Date());
         m.setPids(pids);
         menuMapper.insertSelective(m);
@@ -85,15 +85,20 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     public boolean update(MenuStruct menu) throws TException {
-        String pids = "0";
+        String pids = null;
         if (menu.getPid() > 0) {
             Menu parent = menuMapper.selectByPrimaryKey(menu.getPid());
             pids = StringUtils.isEmpty(parent.getPids()) ? String.valueOf(parent.getId()) : parent.getId() + "," + parent.getPids();
         }
-        Menu m = new Menu();
+        Menu m = menuMapper.selectByPrimaryKey(menu.getId());
+        if (m == null)
+            throw new InvalidOperation(500, "菜单不存在");
         Utils.java2Thrift(m, menu);
         if (m.getId() == null || m.getId() <= 0)
             return false;
+        if (menu.isSetStatus()) {
+            menuMapper.updateChildStatus(m.getId(), m.getStatus());
+        }
         m.setPids(pids);
         return menuMapper.updateByPrimaryKeySelective(m) > 0;
     }

@@ -10,4 +10,13 @@
     <update id="updateChildStatus">
         UPDATE t_user SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)
     </update>
+    <delete id="deleteUserChildrenRoles">
+        DELETE ur.*
+        FROM
+        t_user_role ur
+        LEFT JOIN t_user u ON u.id = rm.user_id
+        WHERE
+        FIND_IN_SET(#{user}, u.pids)
+        AND FIND_IN_SET(ur.role_id,#{roles})
+    </delete>
 </mapper>

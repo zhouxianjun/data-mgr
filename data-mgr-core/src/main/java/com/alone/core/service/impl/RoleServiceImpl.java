@@ -46,12 +46,14 @@ public class RoleServiceImpl implements RoleService.Iface {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<RoleStruct> rolesByUser(long user) throws TException {
         List<Role> roles = roleMapper.listByUser(user);
         return getRoleStructs(roles);
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<RoleStruct> rolesBySetUser(long user, long parent) throws TException {
         if (user == parent) {
             throw new InvalidOperation(500, "自己不能给自己设置角色");

@@ -1,5 +1,4 @@
 import com.alone.thrift.service.MenuService;
-import com.alone.thrift.service.RoleService;
 import org.apache.thrift.TException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

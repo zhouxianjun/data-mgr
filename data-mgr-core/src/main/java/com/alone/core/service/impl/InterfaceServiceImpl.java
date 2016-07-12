@@ -9,6 +9,7 @@ import com.alone.thrift.struct.InvalidOperation;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -28,18 +29,21 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
     private InterfaceMapper interfaceMapper;
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<InterfaceStruct> interfaces() throws InvalidOperation, TException {
         List<Interface> list = interfaceMapper.selectAll();
         return getInterfaceStructs(list);
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<InterfaceStruct> interfacesByUser(long user) throws InvalidOperation, TException {
         List<Interface> list = interfaceMapper.listByUser(user);
         return getInterfaceStructs(list);
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<InterfaceStruct> interfacesBySetMenu(long user, long menu) throws InvalidOperation, TException {
         List<Interface> userList = interfaceMapper.listByUser(user);
         List<Interface> menuList = interfaceMapper.listByMenu(menu);

@@ -16,4 +16,6 @@ public interface UserMapper extends Mapper<User> {
     List<User> listByUser(@Param("user") Long ids);
 
     Integer updateChildStatus(@Param("pid") Long pid, @Param("status") Boolean status);
+
+    Integer deleteUserChildrenRoles(@Param("user") Long user, @Param("roles") String roles);
 }

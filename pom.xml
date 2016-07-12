@@ -16,7 +16,7 @@
 
     <properties>
         <hibernate>4.2.2.Final</hibernate>
-        <spring>3.2.4.RELEASE</spring>
+        <spring>4.2.5.RELEASE</spring>
         <jackson>1.9.13</jackson>
         <servlet>3.1.0</servlet>
         <mybatis.version>3.2.8</mybatis.version>
