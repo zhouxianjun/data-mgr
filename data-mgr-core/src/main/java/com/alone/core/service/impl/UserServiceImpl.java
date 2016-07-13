@@ -1,5 +1,6 @@
 package com.alone.core.service.impl;
 
+import com.alone.common.dto.EmailDto;
 import com.alone.common.entity.Role;
 import com.alone.common.entity.User;
 import com.alone.common.entity.UserRole;
@@ -49,12 +50,16 @@ public class UserServiceImpl implements UserService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
-    public List<UserStruct> usersByUser() throws InvalidOperation, TException {
-        return null;
+    public List<UserStruct> usersByUser(long user) throws InvalidOperation, TException {
+        List<User> users = userMapper.listByUser(user);
+        return getUserStructs(users);
     }
 
     @Override
     public long add(UserStruct bean) throws InvalidOperation, TException {
+        if (getByUsername(bean.getUsername()) != null) {
+            throw new InvalidOperation(500, "该用户已存在");
+        }
         String pids = "0";
         if (bean.getPid() > 0) {
             User parent = userMapper.selectByPrimaryKey(bean.getPid());
@@ -68,9 +73,18 @@ public class UserServiceImpl implements UserService.Iface {
         String pwd = u.getPassword();
         if (StringUtils.isEmpty(pwd))
             pwd = RandomStringUtils.randomAlphanumeric(6);
-        pwd = Utils.MD5(u.getUsername() + pwd);
-        u.setPassword(pwd);
+        u.setPassword(Utils.MD5(u.getUsername() + pwd));
         userMapper.insertSelective(u);
+        if (StringUtils.isNotEmpty(u.getEmail())) {
+            EmailDto emailDto = new EmailDto();
+            emailDto.setSubject("注册通知");
+            emailDto.setEmailContent("密码为:" + pwd);
+            emailDto.setSender("alone@cn-face.com");
+            emailDto.setCc(new String[]{});
+            emailDto.setBcc(new String[]{});
+            emailDto.setReceivers(new String[]{u.getEmail()});
+            emailNotifyService.sendEmailMessageOfSimpleText(emailDto, new Date());
+        }
         return u.getId();
     }
 
@@ -151,9 +165,12 @@ public class UserServiceImpl implements UserService.Iface {
     }
 
     @Override
-    public boolean login(String username, String password) throws InvalidOperation, TException {
+    public long login(String username, String password) throws InvalidOperation, TException {
         User user = getByUsername(username);
-        return user != null && user.getPassword().equals(Utils.MD5(username + password));
+        if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {
+            return user.getId();
+        }
+        return 0;
     }
 
     private User getByUsername(String username) {

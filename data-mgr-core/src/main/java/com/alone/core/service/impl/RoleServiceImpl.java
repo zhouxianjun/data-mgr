@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService.Iface {
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<RoleStruct> rolesByUser(long user) throws TException {
-        List<Role> roles = roleMapper.listByUser(user);
+        List<Role> roles = roleMapper.listChildByUser(user);
         return getRoleStructs(roles);
     }
 
