@@ -10,4 +10,17 @@
     <context:component-scan base-package="com.alone">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
+
+    <bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="defaultEncoding" value="utf-8" />
+        <property name="host" value="smtp.exmail.qq.com" />
+        <property name="username" value="alone@cn-face.com" />
+        <property name="password" value="Zxj19910611" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

@@ -1,9 +1,9 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.alone.common.entity.Role;
 import com.alone.common.entity.User;
 import com.alone.common.entity.UserRole;
+import com.alone.common.service.EmailNotifyService;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.*;
 import com.alone.thrift.service.UserService;
@@ -11,6 +11,8 @@ import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.UserStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService.Iface {
     private UserMapper userMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
+    @Autowired
+    private EmailNotifyService emailNotifyService;
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
@@ -61,6 +65,11 @@ public class UserServiceImpl implements UserService.Iface {
         u.setId(Utils.generateUUID());
         u.setCreate_time(new Date());
         u.setPids(pids);
+        String pwd = u.getPassword();
+        if (StringUtils.isEmpty(pwd))
+            pwd = RandomStringUtils.randomAlphanumeric(6);
+        pwd = Utils.MD5(u.getUsername() + pwd);
+        u.setPassword(pwd);
         userMapper.insertSelective(u);
         return u.getId();
     }
@@ -139,6 +148,18 @@ public class UserServiceImpl implements UserService.Iface {
             userMapper.deleteUserChildrenRoles(user, backString.toString());
         }
         return count == roles.size();
+    }
+
+    @Override
+    public boolean login(String username, String password) throws InvalidOperation, TException {
+        User user = getByUsername(username);
+        return user != null && user.getPassword().equals(Utils.MD5(username + password));
+    }
+
+    private User getByUsername(String username) {
+        User user = new User();
+        user.setUsername(username);
+        return userMapper.selectOne(user);
     }
 
     private List<UserStruct> getUserStructs(List<User> users) {
