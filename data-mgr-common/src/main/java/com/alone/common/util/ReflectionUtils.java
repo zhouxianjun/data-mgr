@@ -171,11 +171,7 @@ public class ReflectionUtils {
 
 			return method;
 
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-		}
+		} catch (Exception e) {}
 
 		return null;
 
