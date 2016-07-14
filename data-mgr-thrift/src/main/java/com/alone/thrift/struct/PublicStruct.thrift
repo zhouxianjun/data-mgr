@@ -47,6 +47,19 @@ struct UserStruct {
     13: i64 pid,
     14: string pids
 }
+struct PageParamStruct {
+    1: optional i32 page = 1,
+    2: optional i32 pageSize = 15,
+    3: optional string sortName,
+    4: optional string sortDir
+}
+struct PageStruct {
+    1: i32 pageNum,
+    2: i32 pageSize,
+    3: i32 count,
+    4: i32 current,
+    5: list<string> items
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

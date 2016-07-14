@@ -14,6 +14,12 @@
         LEFT JOIN t_user_role ur ON ur.role_id = rm.role_id
         WHERE
             ur.user_id = #{user}
+            <if test="enable != null and enable == true">
+                and i.status = 1
+            </if>
+            <if test="enable != null and enable == false">
+                and i.status = 0
+            </if>
         UNION
         SELECT
             i.*
@@ -33,6 +39,12 @@
         ) t
         WHERE
             FIND_IN_SET(t.id, r.pids)
+            <if test="enable != null and enable == true">
+                and i.status = 1
+            </if>
+            <if test="enable != null and enable == false">
+                and i.status = 0
+            </if>
         GROUP BY
             i.id
     </select>
@@ -48,6 +60,9 @@
         OR m.id = #{menu}
         GROUP BY
             i.id
+    </select>
+    <select id="listByPage" resultType="Interface">
+        SELECT * FROM t_interface ORDER BY ${sortName} ${sortDir}
     </select>
     <update id="updateChildStatus">
         UPDATE t_interface SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)

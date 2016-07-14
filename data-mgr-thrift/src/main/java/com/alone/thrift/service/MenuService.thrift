@@ -7,7 +7,7 @@ service MenuService {
 
     list<PublicStruct.MenuStruct> menusBySetRole(1: i64 user, 2: i64 role) throws (1: PublicStruct.InvalidOperation ex);
 
-    i64 add(1: PublicStruct.MenuStruct menu) throws (1: PublicStruct.InvalidOperation ex);
+    i64 add(1: PublicStruct.MenuStruct menu, 2: i64 user) throws (1: PublicStruct.InvalidOperation ex);
 
     bool update(1: PublicStruct.MenuStruct menu) throws (1: PublicStruct.InvalidOperation ex);
 

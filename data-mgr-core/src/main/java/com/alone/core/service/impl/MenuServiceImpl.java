@@ -3,9 +3,11 @@ package com.alone.core.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.alone.common.entity.Menu;
 import com.alone.common.entity.MenuInterface;
+import com.alone.common.entity.RoleMenu;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.MenuInterfaceMapper;
 import com.alone.core.mapper.MenuMapper;
+import com.alone.core.mapper.RoleMenuMapper;
 import com.alone.thrift.service.MenuService;
 import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.MenuStruct;
@@ -33,6 +35,8 @@ public class MenuServiceImpl implements MenuService.Iface {
     private MenuMapper menuMapper;
     @Autowired
     private MenuInterfaceMapper menuInterfaceMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
@@ -44,14 +48,14 @@ public class MenuServiceImpl implements MenuService.Iface {
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<MenuStruct> menusByUser(long user) throws TException {
-        List<Menu> menus = menuMapper.listByUser(user);
+        List<Menu> menus = menuMapper.listByUser(user, true);
         return getMenuStructs(menus);
     }
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<MenuStruct> menusBySetRole(long user, long role) throws TException {
-        List<Menu> userMenus = menuMapper.listByUser(user);
+        List<Menu> userMenus = menuMapper.listByUser(user, null);
         List<Menu> roleMenus = menuMapper.listByRole(role);
         List<MenuStruct> result = getMenuStructs(userMenus);
         for (MenuStruct userMenu : result) {
@@ -68,7 +72,8 @@ public class MenuServiceImpl implements MenuService.Iface {
     }
 
     @Override
-    public long add(MenuStruct menu) throws TException {
+    public long add(MenuStruct menu, long user) throws TException {
+        if (user != 1) throw new InvalidOperation(500, "没有改接口的操作权限");
         String pids = "0";
         if (menu.getPid() > 0) {
             Menu parent = menuMapper.selectByPrimaryKey(menu.getPid());
@@ -80,6 +85,11 @@ public class MenuServiceImpl implements MenuService.Iface {
         m.setCreate_time(new Date());
         m.setPids(pids);
         menuMapper.insertSelective(m);
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setMenu_id(m.getId());
+        roleMenu.setRole_id(1L);
+        roleMenu.setCreate_time(new Date());
+        roleMenuMapper.insert(roleMenu);
         return m.getId();
     }
 

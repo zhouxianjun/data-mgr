@@ -3,6 +3,8 @@ namespace java com.alone.thrift.service
 service InterfaceService {
     list<PublicStruct.InterfaceStruct> interfaces() throws (1: PublicStruct.InvalidOperation ex);
 
+    PublicStruct.PageStruct interfacesByPage(1: PublicStruct.PageParamStruct page) throws (1: PublicStruct.InvalidOperation ex);
+
     list<PublicStruct.InterfaceStruct> interfacesByUser(1: i64 user) throws (1: PublicStruct.InvalidOperation ex);
 
     list<PublicStruct.InterfaceStruct> interfacesBySetMenu(1: i64 user, 2: i64 menu) throws (1: PublicStruct.InvalidOperation ex);

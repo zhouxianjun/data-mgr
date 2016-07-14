@@ -44,6 +44,7 @@ public class ThriftServiceAop {
     @AfterThrowing(value = "allMethod()", throwing = "ex")
     public void doAfterThrow(Throwable ex) throws InvalidOperation {
         log.error("Thrift service 异常:", ex);
-        throw new InvalidOperation(500, "调用接口异常");
+        if (!(ex instanceof InvalidOperation))
+            throw new InvalidOperation(500, "调用接口异常");
     }
 }

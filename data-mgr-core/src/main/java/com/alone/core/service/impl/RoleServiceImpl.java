@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService.Iface {
             throw new InvalidOperation(500, "自己不能给自己设置角色");
         }
         List<Role> parentRoles = roleMapper.listChildByUser(parent);
-        List<Role> userRoles = roleMapper.listChildByUser(user);
+        List<Role> userRoles = roleMapper.listByUser(user);
         List<RoleStruct> result = getRoleStructs(parentRoles);
         for (RoleStruct struct : result) {
             boolean ow = false;
@@ -111,8 +111,14 @@ public class RoleServiceImpl implements RoleService.Iface {
 
     @Override
     public boolean setMenus(long role, long user, List<Long> menus) throws TException {
+        if (menus.size() <= 0 || menus.get(0) <= 0) {
+            Example example = new Example(RoleMenu.class);
+            example.createCriteria().andEqualTo("role_id", role);
+            roleMenuMapper.deleteByExample(example);
+            return true;
+        }
         //验证功能点是否超权限
-        List<Menu> userMenus = menuMapper.listByUser(user);
+        List<Menu> userMenus = menuMapper.listByUser(user, null);
         List<Menu> oldMenus = menuMapper.listByRole(role);
         for (Long menu : menus) {
             boolean have = false;

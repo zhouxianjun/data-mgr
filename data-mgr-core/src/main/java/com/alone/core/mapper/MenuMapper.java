@@ -13,7 +13,7 @@ import java.util.List;
  * @date 16-7-7 下午9:55
  */
 public interface MenuMapper extends Mapper<Menu> {
-    List<Menu> listByUser(@Param("user") Long user);
+    List<Menu> listByUser(@Param("user") Long user, @Param("enable") Boolean enable);
 
     List<Menu> listByRole(@Param("role") Long role);
 

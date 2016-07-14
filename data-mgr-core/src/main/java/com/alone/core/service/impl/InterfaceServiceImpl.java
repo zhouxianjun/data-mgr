@@ -1,11 +1,15 @@
 package com.alone.core.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alone.common.dto.Page;
 import com.alone.common.entity.Interface;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.InterfaceMapper;
 import com.alone.thrift.service.InterfaceService;
 import com.alone.thrift.struct.InterfaceStruct;
 import com.alone.thrift.struct.InvalidOperation;
+import com.alone.thrift.struct.PageParamStruct;
+import com.alone.thrift.struct.PageStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +39,33 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
         return getInterfaceStructs(list);
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    public PageStruct interfacesByPage(PageParamStruct page) throws InvalidOperation, TException {
+        Page<Interface> interfacePage = new Page<>();
+        interfacePage.setPageNum(page.getPage());
+        interfacePage.setPageSize(page.getPageSize());
+        List<Interface> list = interfaceMapper.listByPage(interfacePage, page.getSortName(), page.getSortDir());
+        interfacePage.setItems(list);
+        List<String> stringList = new ArrayList<>();
+        for (Interface anInterface : list) {
+            stringList.add(JSONObject.toJSONString(anInterface));
+        }
+        PageStruct struct = new PageStruct(interfacePage.getPageNum(), interfacePage.getPageSize(),
+                interfacePage.getCount(), interfacePage.getCurrentIndex(), stringList);
+        return struct;
+    }
+
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<InterfaceStruct> interfacesByUser(long user) throws InvalidOperation, TException {
-        List<Interface> list = interfaceMapper.listByUser(user);
+        List<Interface> list = interfaceMapper.listByUser(user, true);
         return getInterfaceStructs(list);
     }
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<InterfaceStruct> interfacesBySetMenu(long user, long menu) throws InvalidOperation, TException {
-        List<Interface> userList = interfaceMapper.listByUser(user);
+        List<Interface> userList = interfaceMapper.listByUser(user, null);
         List<Interface> menuList = interfaceMapper.listByMenu(menu);
         List<InterfaceStruct> result = getInterfaceStructs(userList);
         for (InterfaceStruct userInterface : result) {
@@ -63,6 +83,12 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
 
     @Override
     public long add(InterfaceStruct bean) throws InvalidOperation, TException {
+        Interface select = new Interface();
+        select.setAuth(bean.getAuth());
+        select = interfaceMapper.selectOne(select);
+        if (select != null) {
+            throw new InvalidOperation(500, "该接口已存在");
+        }
         Interface i = new Interface();
         Utils.java2Thrift(i, bean);
         i.setId(Utils.generateUUID());

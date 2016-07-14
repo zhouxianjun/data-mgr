@@ -110,6 +110,12 @@ public class UserServiceImpl implements UserService.Iface {
 
     @Override
     public boolean setRoles(long user, long parent, List<Long> roles) throws InvalidOperation, TException {
+        if (roles.size() <= 0 || roles.get(0) <= 0) {
+            Example example = new Example(UserRole.class);
+            example.createCriteria().andEqualTo("user_id", user);
+            userRoleMapper.deleteByExample(example);
+            return true;
+        }
         //验证角色是否超出当前用户
         List<Role> parentRoles = roleMapper.listChildByUser(parent);
         List<Role> oldRoles = roleMapper.listChildByUser(user);
@@ -165,12 +171,12 @@ public class UserServiceImpl implements UserService.Iface {
     }
 
     @Override
-    public long login(String username, String password) throws InvalidOperation, TException {
+    public UserStruct login(String username, String password) throws InvalidOperation, TException {
         User user = getByUsername(username);
         if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {
-            return user.getId();
+            return Utils.java2Thrift(new UserStruct(), user);
         }
-        return 0;
+        return null;
     }
 
     private User getByUsername(String username) {
