@@ -1,8 +1,10 @@
 package com.alone.core.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.Page;
 import com.alone.common.entity.Interface;
+import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.InterfaceMapper;
 import com.alone.thrift.service.InterfaceService;
@@ -34,12 +36,14 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<InterfaceStruct> interfaces() throws InvalidOperation, TException {
         List<Interface> list = interfaceMapper.selectAll();
         return getInterfaceStructs(list);
     }
 
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public PageStruct interfacesByPage(PageParamStruct page) throws InvalidOperation, TException {
         Page<Interface> interfacePage = new Page<>();
         interfacePage.setPageNum(page.getPage());
@@ -57,6 +61,7 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<InterfaceStruct> interfacesByUser(long user) throws InvalidOperation, TException {
         List<Interface> list = interfaceMapper.listByUser(user, true);
         return getInterfaceStructs(list);
@@ -64,8 +69,9 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<InterfaceStruct> interfacesBySetMenu(long user, long menu) throws InvalidOperation, TException {
-        List<Interface> userList = interfaceMapper.listByUser(user, null);
+        List<Interface> userList = user <= 0 ? interfaceMapper.selectAll() : interfaceMapper.listByUser(user, null);
         List<Interface> menuList = interfaceMapper.listByMenu(menu);
         List<InterfaceStruct> result = getInterfaceStructs(userList);
         for (InterfaceStruct userInterface : result) {

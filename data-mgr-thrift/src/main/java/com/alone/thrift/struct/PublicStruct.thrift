@@ -60,6 +60,18 @@ struct PageStruct {
     4: i32 current,
     5: list<string> items
 }
+struct ResourcesStruct {
+    1: i64 id,
+    2: string path,
+    3: string md5,
+    4: i32 size,
+    5: string name,
+    6: i64 create_time
+}
+struct BoxStruct {
+    1: i64 id,
+    2: i64 user_id
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

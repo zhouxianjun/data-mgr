@@ -1019,6 +1019,136 @@ PageStruct.prototype.write = function(output) {
   return;
 };
 
+ResourcesStruct = module.exports.ResourcesStruct = function(args) {
+  this.id = null;
+  this.path = null;
+  this.md5 = null;
+  this.size = null;
+  this.name = null;
+  this.create_time = null;
+  if (args) {
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.path !== undefined && args.path !== null) {
+      this.path = args.path;
+    }
+    if (args.md5 !== undefined && args.md5 !== null) {
+      this.md5 = args.md5;
+    }
+    if (args.size !== undefined && args.size !== null) {
+      this.size = args.size;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.create_time !== undefined && args.create_time !== null) {
+      this.create_time = args.create_time;
+    }
+  }
+};
+ResourcesStruct.prototype = {};
+ResourcesStruct.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I64) {
+        this.id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.path = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.md5 = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.size = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.I64) {
+        this.create_time = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+ResourcesStruct.prototype.write = function(output) {
+  output.writeStructBegin('ResourcesStruct');
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I64, 1);
+    output.writeI64(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.path !== null && this.path !== undefined) {
+    output.writeFieldBegin('path', Thrift.Type.STRING, 2);
+    output.writeString(this.path);
+    output.writeFieldEnd();
+  }
+  if (this.md5 !== null && this.md5 !== undefined) {
+    output.writeFieldBegin('md5', Thrift.Type.STRING, 3);
+    output.writeString(this.md5);
+    output.writeFieldEnd();
+  }
+  if (this.size !== null && this.size !== undefined) {
+    output.writeFieldBegin('size', Thrift.Type.I32, 4);
+    output.writeI32(this.size);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 5);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.create_time !== null && this.create_time !== undefined) {
+    output.writeFieldBegin('create_time', Thrift.Type.I64, 6);
+    output.writeI64(this.create_time);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 InvalidOperation = module.exports.InvalidOperation = function(args) {
   Thrift.TException.call(this, "InvalidOperation")
   this.name = "InvalidOperation"

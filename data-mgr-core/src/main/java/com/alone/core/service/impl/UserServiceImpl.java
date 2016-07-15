@@ -1,9 +1,11 @@
 package com.alone.core.service.impl;
 
+import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.EmailDto;
 import com.alone.common.entity.Role;
 import com.alone.common.entity.User;
 import com.alone.common.entity.UserRole;
+import com.alone.common.mybatis.DataSource;
 import com.alone.common.service.EmailNotifyService;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.*;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<UserStruct> users() throws InvalidOperation, TException {
         List<User> users = userMapper.selectAll();
         return getUserStructs(users);
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<UserStruct> usersByUser(long user) throws InvalidOperation, TException {
         List<User> users = userMapper.listByUser(user);
         return getUserStructs(users);
@@ -171,6 +175,8 @@ public class UserServiceImpl implements UserService.Iface {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public UserStruct login(String username, String password) throws InvalidOperation, TException {
         User user = getByUsername(username);
         if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {

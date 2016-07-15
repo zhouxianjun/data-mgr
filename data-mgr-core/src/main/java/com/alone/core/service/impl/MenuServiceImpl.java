@@ -1,9 +1,11 @@
 package com.alone.core.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.Menu;
 import com.alone.common.entity.MenuInterface;
 import com.alone.common.entity.RoleMenu;
+import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.MenuInterfaceMapper;
 import com.alone.core.mapper.MenuMapper;
@@ -39,6 +41,7 @@ public class MenuServiceImpl implements MenuService.Iface {
     private RoleMenuMapper roleMenuMapper;
 
     @Override
+    @DataSource(DataSourceType.READ)
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public List<MenuStruct> menus() throws TException {
         List<Menu> menus = menuMapper.selectAll();
@@ -47,6 +50,7 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<MenuStruct> menusByUser(long user) throws TException {
         List<Menu> menus = menuMapper.listByUser(user, true);
         return getMenuStructs(menus);
@@ -54,6 +58,7 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<MenuStruct> menusBySetRole(long user, long role) throws TException {
         List<Menu> userMenus = menuMapper.listByUser(user, null);
         List<Menu> roleMenus = menuMapper.listByRole(role);

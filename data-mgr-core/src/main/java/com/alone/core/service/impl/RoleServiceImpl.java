@@ -1,9 +1,11 @@
 package com.alone.core.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.Menu;
 import com.alone.common.entity.Role;
 import com.alone.common.entity.RoleMenu;
+import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.mapper.MenuMapper;
 import com.alone.core.mapper.RoleMapper;
@@ -40,6 +42,7 @@ public class RoleServiceImpl implements RoleService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<RoleStruct> roles() throws TException {
         List<Role> roles = roleMapper.selectAll();
         return getRoleStructs(roles);
@@ -47,6 +50,7 @@ public class RoleServiceImpl implements RoleService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<RoleStruct> rolesByUser(long user) throws TException {
         List<Role> roles = roleMapper.listChildByUser(user);
         return getRoleStructs(roles);
@@ -54,6 +58,7 @@ public class RoleServiceImpl implements RoleService.Iface {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
     public List<RoleStruct> rolesBySetUser(long user, long parent) throws TException {
         if (user == parent) {
             throw new InvalidOperation(500, "自己不能给自己设置角色");
