@@ -1,6 +1,7 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.Page;
 import com.alone.common.entity.Interface;
@@ -50,12 +51,8 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
         interfacePage.setPageSize(page.getPageSize());
         List<Interface> list = interfaceMapper.listByPage(interfacePage, page.getSortName(), page.getSortDir());
         interfacePage.setItems(list);
-        List<String> stringList = new ArrayList<>();
-        for (Interface anInterface : list) {
-            stringList.add(JSONObject.toJSONString(anInterface));
-        }
         PageStruct struct = new PageStruct(interfacePage.getPageNum(), interfacePage.getPageSize(),
-                interfacePage.getCount(), interfacePage.getCurrentIndex(), stringList);
+                interfacePage.getCount(), interfacePage.getCurrentIndex(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));
         return struct;
     }
 

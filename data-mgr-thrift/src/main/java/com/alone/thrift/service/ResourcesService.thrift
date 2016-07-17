@@ -1,5 +1,5 @@
 include "../struct/PublicStruct.thrift"
 namespace java com.alone.thrift.service
 service ResourcesService {
-    bool save(1: PublicStruct.ResourcesStruct bean) throws (1: PublicStruct.InvalidOperation ex);
+    PublicStruct.ResourcesStruct getByVersion(1: i64 id) throws (1: PublicStruct.InvalidOperation ex);
 }

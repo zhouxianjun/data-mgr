@@ -62,7 +62,10 @@
             i.id
     </select>
     <select id="listByPage" resultType="Interface">
-        SELECT * FROM t_interface ORDER BY ${sortName} ${sortDir}
+        SELECT * FROM t_interface
+        <if test="sortName != null">
+          ORDER BY ${sortName} ${sortDir}
+        </if>
     </select>
     <update id="updateChildStatus">
         UPDATE t_interface SET `status` = #{status} WHERE FIND_IN_SET(#{pid}, pids)

@@ -2,6 +2,7 @@ package com.alone.common.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -13,28 +14,19 @@ import java.util.Date;
  * @date 2016/7/15 16:31
  */
 @Data
-@Table(name = "t_box")
-public class Box {
+@Table(name = "t_version")
+public class Version {
     @Id
     private Long id;
 
-    private Long user_id;
+    private Long resource;
 
-    private String box_id;
+    private String version;
 
-    private String ip;
+    private Integer version_code;
 
-    private Long version_id;
-
-    private Long login_count;
-
-    private Boolean status;
-
-    private Integer province_id;
-
-    private Integer city_id;
+    @Column(name = "`desc`")
+    private String desc;
 
     private Date create_time;
-
-    private Date update_time;
 }

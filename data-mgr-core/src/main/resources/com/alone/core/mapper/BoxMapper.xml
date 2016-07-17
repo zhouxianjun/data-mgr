@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.BoxMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT b.*, u.name as ow, v.version  FROM t_box b
+        LEFT JOIN t_version v ON v.id = b.version_id
+        LEFT JOIN t_user u ON u.id = b.user_id
+        <if test="sortName != null">
+            <choose>
+                <when test="sortName == 'ow'">
+                    ORDER BY u.name ${sortDir}
+                </when>
+                <when test="sortName == 'version'">
+                    ORDER BY v.version_code ${sortDir}
+                </when>
+                <otherwise>
+                    ORDER BY ${sortName} ${sortDir}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+</mapper>

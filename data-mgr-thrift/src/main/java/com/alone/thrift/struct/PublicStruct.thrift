@@ -58,7 +58,7 @@ struct PageStruct {
     2: i32 pageSize,
     3: i32 count,
     4: i32 current,
-    5: list<string> items
+    5: string items
 }
 struct ResourcesStruct {
     1: i64 id,
@@ -70,7 +70,36 @@ struct ResourcesStruct {
 }
 struct BoxStruct {
     1: i64 id,
-    2: i64 user_id
+    2: i64 user_id,
+    3: string box_id,
+    4: bool status,
+    5: i32 province_id,
+    6: i32 city_id
+}
+struct VersionStruct {
+    1: i64 id,
+    2: i64 resource,
+    3: string version,
+    4: i32 version_code,
+    5: string desc
+}
+struct AppStruct {
+    1: i64 id,
+    2: string name,
+    3: string zh_name,
+    4: string cp_name,
+    5: double price,
+    6: bool network,
+    7: bool open_network,
+    8: string memo,
+    9: bool require,
+    10: bool white,
+    11: bool black
+    12: i32 active_open_count,
+    13: i32 active_flow,
+    14: i32 active_stay_days,
+    15: i32 active_show_time,
+    16: bool active_open_network
 }
 exception InvalidOperation {
     1: i32 code,

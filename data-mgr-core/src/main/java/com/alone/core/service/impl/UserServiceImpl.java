@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService.Iface {
         if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {
             return Utils.java2Thrift(new UserStruct(), user);
         }
-        return null;
+        return new UserStruct();
     }
 
     private User getByUsername(String username) {
