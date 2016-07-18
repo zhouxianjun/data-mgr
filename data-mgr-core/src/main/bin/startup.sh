@@ -36,7 +36,7 @@ OPTS="-server \
 	  -XX:+UseBiasedLocking \
 	  -XX:+DisableExplicitGC"
 
-env LC_ALL="en_US.UTF-8" java $OPTS $JMX_OPTS $DEBUG_OPTS -cp ./config:$JRE_HOME/lib/*:./lib/*:data-mgr-core-1.0.jar com.alone.core.Server &
+env LC_ALL="en_US.UTF-8" java $OPTS -cp ./config:$JRE_HOME/lib/*:./lib/*:data-mgr-core.jar com.alone.core.Server &
 
 echo $! > service.pid
 echo 'Startup the I/O Service.'
