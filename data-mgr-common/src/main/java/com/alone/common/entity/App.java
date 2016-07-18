@@ -2,6 +2,7 @@ package com.alone.common.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class App {
     @Id
     private Long id;
 
+    @Column(name = "`name`")
     private String name;
 
     private String zh_name;
@@ -27,7 +29,7 @@ public class App {
 
     private BigDecimal price;
 
-    private Boolean network;
+    private Integer network;
 
     private Long resources_id;
 
@@ -35,6 +37,7 @@ public class App {
 
     private String memo;
 
+    @Column(name = "`require`")
     private Boolean require;
 
     private Boolean white;

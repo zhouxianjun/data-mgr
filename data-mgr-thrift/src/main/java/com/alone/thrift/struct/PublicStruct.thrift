@@ -89,7 +89,7 @@ struct AppStruct {
     3: string zh_name,
     4: string cp_name,
     5: double price,
-    6: bool network,
+    6: i32 network,
     7: bool open_network,
     8: string memo,
     9: bool require,

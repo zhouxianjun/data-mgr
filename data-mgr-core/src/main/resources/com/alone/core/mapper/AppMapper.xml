@@ -5,7 +5,7 @@
 
 <mapper namespace="com.alone.core.mapper.AppMapper">
     <select id="listByPage" resultType="java.util.HashMap">
-        SELECT app.*, r.size as resources_size, r.name as resources_name  FROM t_app app
+        SELECT app.*, r.size as resources_size, r.name as resources_name, r.md5 as resources_md5, r.create_time as resources_time, r.name as resources_name  FROM t_app app
         LEFT JOIN t_resources r ON r.id = app.resources_id
         <if test="sortName != null">
             <choose>
