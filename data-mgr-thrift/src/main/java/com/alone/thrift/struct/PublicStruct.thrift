@@ -95,11 +95,16 @@ struct AppStruct {
     9: bool require,
     10: bool white,
     11: bool black
-    12: i32 active_open_count,
-    13: i32 active_flow,
-    14: i32 active_stay_days,
-    15: i32 active_show_time,
-    16: bool active_open_network
+    12: i64 active_id
+}
+struct AppActiveStruct {
+    1: i64 id,
+    2: string name,
+    3: i32 open_count,
+    4: i32 flow,
+    5: i32 stay_days,
+    6: i32 show_time,
+    7: bool open_network
 }
 exception InvalidOperation {
     1: i32 code,

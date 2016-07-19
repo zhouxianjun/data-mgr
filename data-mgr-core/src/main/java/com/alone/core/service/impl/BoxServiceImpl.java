@@ -1,14 +1,12 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
-import com.alone.common.dto.Page;
 import com.alone.common.entity.Box;
 import com.alone.common.entity.Resources;
 import com.alone.common.entity.Version;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
+import com.alone.core.Util;
 import com.alone.core.mapper.BoxMapper;
 import com.alone.core.mapper.ResourcesMapper;
 import com.alone.core.mapper.VersionMapper;
@@ -21,8 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhouxianjun(Alone)
@@ -47,12 +43,7 @@ public class BoxServiceImpl implements BoxService.Iface {
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
     public PageStruct boxByPage(PageParamStruct page) throws InvalidOperation, TException {
-        Page p = new Page<>();
-        p.setPageNum(page.getPage());
-        p.setPageSize(page.getPageSize());
-        List<Map<String, Object>> list = boxMapper.listByPage(p, page.getSortName(), page.getSortDir());
-        return new PageStruct(p.getPageNum(), p.getPageSize(),
-                p.getCount(), page.getPage(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));
+        return Util.buildListPage(page, boxMapper);
     }
 
     @Override

@@ -15,36 +15,23 @@ import java.util.Date;
  * @date 2016/7/15 16:31
  */
 @Data
-@Table(name = "t_app")
-public class App {
+@Table(name = "t_app_active")
+public class AppActive {
     @Id
     private Long id;
 
     @Column(name = "`name`")
     private String name;
 
-    private String zh_name;
+    private Integer open_count;
 
-    private String cp_name;
+    private Integer flow;
 
-    private BigDecimal price;
+    private Integer stay_days;
 
-    private Integer network;
-
-    private Long resources_id;
+    private Integer show_time;
 
     private Boolean open_network;
-
-    private String memo;
-
-    @Column(name = "`require`")
-    private Boolean require;
-
-    private Boolean white;
-
-    private Boolean black;
-
-    private Long active_id;
 
     private Date create_time;
 }

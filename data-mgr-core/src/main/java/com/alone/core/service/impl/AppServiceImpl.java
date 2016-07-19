@@ -1,14 +1,12 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
-import com.alone.common.dto.Page;
 import com.alone.common.entity.App;
 import com.alone.common.entity.AppImg;
 import com.alone.common.entity.Resources;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
+import com.alone.core.Util;
 import com.alone.core.mapper.AppImgMapper;
 import com.alone.core.mapper.AppMapper;
 import com.alone.core.mapper.ResourcesMapper;
@@ -24,7 +22,6 @@ import tk.mybatis.mapper.entity.Example;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhouxianjun(Alone)
@@ -81,12 +78,7 @@ public class AppServiceImpl implements AppService.Iface {
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
     public PageStruct appByPage(PageParamStruct page) throws InvalidOperation, TException {
-        Page p = new Page<>();
-        p.setPageNum(page.getPage());
-        p.setPageSize(page.getPageSize());
-        List<Map<String, Object>> list = appMapper.listByPage(p, page.getSortName(), page.getSortDir());
-        return new PageStruct(p.getPageNum(), p.getPageSize(),
-                p.getCount(), page.getPage(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));
+        return Util.buildListPage(page, appMapper);
     }
 
     @Override
@@ -125,7 +117,7 @@ public class AppServiceImpl implements AppService.Iface {
                 }
                 if (isAdd) {
                     Resources r = new Resources();
-                    Utils.java2Thrift(r, resources);
+                    Utils.java2Thrift(r, resource);
                     r.setId(Utils.generateUUID());
                     r.setCreate_time(new Date());
                     resourcesMapper.insertSelective(r);
