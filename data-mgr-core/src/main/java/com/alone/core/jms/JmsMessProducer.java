@@ -1,6 +1,10 @@
 package com.alone.core.jms;
 
 import com.alibaba.fastjson.JSON;
+import com.alone.common.dto.BasicEnum;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -23,23 +27,38 @@ import javax.annotation.Resource;
 @Component
 @Slf4j
 public class JmsMessProducer {
-    @Resource(name = "topic-demo")
-    private Destination demoTopic;
+    @Resource(name = "topic-box")
+    private Destination boxTopic;
+    @Resource(name = "topic-sdk")
+    private Destination sdkTopic;
 
     @Resource(name = "jmsTemplate")
     private JmsTemplate jmsTemplate;
 
-    public void sendMessage(final Object obj) {
+    public void sendMessage(final Object obj, String type) {
+        if (type == null) {
+            send(obj, "box");
+            send(obj, "sdk");
+        } else {
+            if (!type.equals("box") && !type.equals("sdk")) {
+                log.warn("消息类型错误,发送失败");
+                return;
+            }
+            send(obj, type);
+        }
+    }
+
+    private void send(final Object obj, String type){
         try {
-            jmsTemplate.send(demoTopic, new MessageCreator() {
+            final String jsonString = JSON.toJSONString(obj);
+            jmsTemplate.send(type.equals("box") ? boxTopic : sdkTopic, new MessageCreator() {
                 @Override
                 public Message createMessage(Session session)
                         throws JMSException {
-
-                    return session.createTextMessage(JSON.toJSONString(obj));
+                    return session.createTextMessage(jsonString);
                 }
             });
-            log.info("消息已发送");
+            log.info("消息已发送 type: {}, content: {}", type, jsonString);
         } catch (JmsException e) {
             log.error("消息异常(JmsException)", e);
         }

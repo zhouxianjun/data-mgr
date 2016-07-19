@@ -26,8 +26,36 @@
     <!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="deliveryMode" value="2"/>
+        <property name="pubSubDomain" value="true" />
     </bean>
 
     <!-- 消息主题 -->
-    <amq:topic id="topic-demo" name="topic-demo" physicalName="q.core.demo"/>
+    <amq:topic id="topic-box" name="topic-box" physicalName="t.core.box"/>
+    <amq:topic id="topic-sdk" name="topic-sdk" physicalName="t.core.sdk"/>
+    <!-- 接收队列 -->
+    <!--<amq:queue id="queue-box" name="queue-box" physicalName="q.core.box"/>
+    <amq:queue id="queue-sdk" name="queue-sdk" physicalName="q.core.sdk"/>
+
+    &lt;!&ndash; 接收消息盒子消息&ndash;&gt;
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="queue-box"/>
+        <property name="messageListener" ref="boxMsgListener" />
+        <property name="concurrentConsumers" value="1" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="autoStartup" value="true" />
+    </bean>
+
+    &lt;!&ndash; 接收消息SDK消息&ndash;&gt;
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="queue-box"/>
+        <property name="messageListener" ref="SDKMsgListener" />
+        <property name="concurrentConsumers" value="1" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="autoStartup" value="true" />
+    </bean>-->
 </beans>

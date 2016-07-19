@@ -22,6 +22,6 @@ public class JMSTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void sendTest() {
-        jmsMessProducer.sendMessage(new VersionStruct().setVersion("test"));
+        jmsMessProducer.sendMessage(new VersionStruct().setVersion("test"), "box");
     }
 }
