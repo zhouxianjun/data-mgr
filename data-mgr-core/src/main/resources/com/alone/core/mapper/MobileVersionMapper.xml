@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.MobileVersionMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT
+          *
+        FROM t_mobile_version
+        <if test="sortName != null">
+            ORDER BY ${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="listByPageByModel" resultType="java.util.HashMap">
+        SELECT
+        *
+        FROM t_mobile_version
+        WHERE model_id = #{model}
+        <if test="sortName != null">
+            ORDER BY ${sortName} ${sortDir}
+        </if>
+    </select>
+</mapper>
