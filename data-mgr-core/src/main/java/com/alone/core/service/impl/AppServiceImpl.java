@@ -13,6 +13,7 @@ import com.alone.core.mapper.ResourcesMapper;
 import com.alone.thrift.service.AppService;
 import com.alone.thrift.struct.*;
 import com.gary.thriftext.spring.annotation.ThriftService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -111,54 +113,47 @@ public class AppServiceImpl implements AppService.Iface {
             throw new InvalidOperation(500, "应用不存在");
         Example example = new Example(AppImg.class);
         example.createCriteria().andEqualTo("app_id", id);
-        List<AppImg> imgs = appImgMapper.selectByExample(example);
-        if (imgs != null) {
-            // 添加
-            for (ResourcesStruct resource : resources) {
-                boolean isAdd = true;
-                for (AppImg img : imgs) {
-                    if (resource.getId() == img.getResources_id()) {
-                        isAdd = false;
-                        break;
-                    }
+        appImgMapper.deleteByExample(example);
+        for (ResourcesStruct resource : resources) {
+            Long rid = null;
+            if (resource.getId() > 0) {
+                Resources db = resourcesMapper.selectByPrimaryKey(resource.getId());
+                if (db != null) {
+                    rid = db.getId();
                 }
-                if (isAdd) {
-                    Long rid = null;
-                    if (resource.getId() > 0) {
-                        Resources db = resourcesMapper.selectByPrimaryKey(resource.getId());
-                        if (db != null) {
-                            rid = db.getId();
-                        }
-                    }
-                    if (rid == null) {
-                        Resources r = new Resources();
-                        Utils.java2Thrift(r, resource);
-                        r.setId(Utils.generateUUID());
-                        r.setCreate_time(new Date());
-                        resourcesMapper.insertSelective(r);
-                        rid = r.getId();
-                    }
-                    AppImg img = new AppImg();
-                    img.setResources_id(rid);
-                    img.setApp_id(id);
-                    appImgMapper.insert(img);
-                }
+            } else {
+                if (StringUtils.isEmpty(resource.getMd5()))
+                    continue;
+                Resources r = new Resources();
+                Utils.java2Thrift(r, resource);
+                r.setId(Utils.generateUUID());
+                r.setCreate_time(new Date());
+                resourcesMapper.insertSelective(r);
+                rid = r.getId();
             }
-            //删除
-            for (AppImg img : imgs) {
-                boolean isDel = true;
-                for (ResourcesStruct resource : resources) {
-                    if (resource.getId() == img.getResources_id()) {
-                        isDel = false;
-                        break;
-                    }
-                }
-                if (isDel) {
-                    resourcesMapper.deleteByPrimaryKey(img.getResources_id());
-                    appImgMapper.delete(img);
-                }
-            }
+            AppImg img = new AppImg();
+            img.setResources_id(rid);
+            img.setApp_id(id);
+            appImgMapper.insert(img);
         }
         return true;
+    }
+
+    @Override
+    public List<ResourcesStruct> imgs(long id) throws InvalidOperation, TException {
+        List<Resources> resourcesList = appMapper.getImgs(id);
+        return getResourcesStructs(resourcesList);
+    }
+
+    private List<ResourcesStruct> getResourcesStructs(List<Resources> resources) {
+        List<ResourcesStruct> result = new ArrayList<>();
+        if (resources != null && !resources.isEmpty()) {
+            for (Resources r : resources) {
+                result.add(Utils.java2Thrift(new ResourcesStruct()
+                                .setCreate_time(r.getCreate_time().getTime())
+                        , r));
+            }
+        }
+        return result;
     }
 }

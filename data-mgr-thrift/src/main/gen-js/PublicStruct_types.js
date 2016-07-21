@@ -1597,6 +1597,298 @@ AppStruct.prototype.write = function(output) {
   return;
 };
 
+AppRequireStruct = module.exports.AppRequireStruct = function(args) {
+  this.id = null;
+  this.name = null;
+  this.resources_id = null;
+  this.type = null;
+  this.memo = null;
+  if (args) {
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.resources_id !== undefined && args.resources_id !== null) {
+      this.resources_id = args.resources_id;
+    }
+    if (args.type !== undefined && args.type !== null) {
+      this.type = args.type;
+    }
+    if (args.memo !== undefined && args.memo !== null) {
+      this.memo = args.memo;
+    }
+  }
+};
+AppRequireStruct.prototype = {};
+AppRequireStruct.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I64) {
+        this.id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I64) {
+        this.resources_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.type = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.memo = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AppRequireStruct.prototype.write = function(output) {
+  output.writeStructBegin('AppRequireStruct');
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I64, 1);
+    output.writeI64(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 2);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.resources_id !== null && this.resources_id !== undefined) {
+    output.writeFieldBegin('resources_id', Thrift.Type.I64, 3);
+    output.writeI64(this.resources_id);
+    output.writeFieldEnd();
+  }
+  if (this.type !== null && this.type !== undefined) {
+    output.writeFieldBegin('type', Thrift.Type.I32, 4);
+    output.writeI32(this.type);
+    output.writeFieldEnd();
+  }
+  if (this.memo !== null && this.memo !== undefined) {
+    output.writeFieldBegin('memo', Thrift.Type.STRING, 5);
+    output.writeString(this.memo);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+AppWhiteStruct = module.exports.AppWhiteStruct = function(args) {
+  this.id = null;
+  this.name = null;
+  this.resources_id = null;
+  this.memo = null;
+  this.version = null;
+  this.brand_id = null;
+  this.model_id = null;
+  this.version_id = null;
+  this.base_version_id = null;
+  if (args) {
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.resources_id !== undefined && args.resources_id !== null) {
+      this.resources_id = args.resources_id;
+    }
+    if (args.memo !== undefined && args.memo !== null) {
+      this.memo = args.memo;
+    }
+    if (args.version !== undefined && args.version !== null) {
+      this.version = args.version;
+    }
+    if (args.brand_id !== undefined && args.brand_id !== null) {
+      this.brand_id = args.brand_id;
+    }
+    if (args.model_id !== undefined && args.model_id !== null) {
+      this.model_id = args.model_id;
+    }
+    if (args.version_id !== undefined && args.version_id !== null) {
+      this.version_id = args.version_id;
+    }
+    if (args.base_version_id !== undefined && args.base_version_id !== null) {
+      this.base_version_id = args.base_version_id;
+    }
+  }
+};
+AppWhiteStruct.prototype = {};
+AppWhiteStruct.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I64) {
+        this.id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I64) {
+        this.resources_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.memo = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.version = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.I64) {
+        this.brand_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
+      if (ftype == Thrift.Type.I64) {
+        this.model_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 8:
+      if (ftype == Thrift.Type.I64) {
+        this.version_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 9:
+      if (ftype == Thrift.Type.I64) {
+        this.base_version_id = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AppWhiteStruct.prototype.write = function(output) {
+  output.writeStructBegin('AppWhiteStruct');
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I64, 1);
+    output.writeI64(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 2);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.resources_id !== null && this.resources_id !== undefined) {
+    output.writeFieldBegin('resources_id', Thrift.Type.I64, 3);
+    output.writeI64(this.resources_id);
+    output.writeFieldEnd();
+  }
+  if (this.memo !== null && this.memo !== undefined) {
+    output.writeFieldBegin('memo', Thrift.Type.STRING, 4);
+    output.writeString(this.memo);
+    output.writeFieldEnd();
+  }
+  if (this.version !== null && this.version !== undefined) {
+    output.writeFieldBegin('version', Thrift.Type.STRING, 5);
+    output.writeString(this.version);
+    output.writeFieldEnd();
+  }
+  if (this.brand_id !== null && this.brand_id !== undefined) {
+    output.writeFieldBegin('brand_id', Thrift.Type.I64, 6);
+    output.writeI64(this.brand_id);
+    output.writeFieldEnd();
+  }
+  if (this.model_id !== null && this.model_id !== undefined) {
+    output.writeFieldBegin('model_id', Thrift.Type.I64, 7);
+    output.writeI64(this.model_id);
+    output.writeFieldEnd();
+  }
+  if (this.version_id !== null && this.version_id !== undefined) {
+    output.writeFieldBegin('version_id', Thrift.Type.I64, 8);
+    output.writeI64(this.version_id);
+    output.writeFieldEnd();
+  }
+  if (this.base_version_id !== null && this.base_version_id !== undefined) {
+    output.writeFieldBegin('base_version_id', Thrift.Type.I64, 9);
+    output.writeI64(this.base_version_id);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 AppActiveStruct = module.exports.AppActiveStruct = function(args) {
   this.id = null;
   this.name = null;

@@ -12,4 +12,6 @@ service AppService {
     bool changeAppFile(1: i64 id, 2: PublicStruct.ResourcesStruct resources) throws (1: PublicStruct.InvalidOperation ex);
 
     bool changeAppImg(1: i64 id, 2: list<PublicStruct.ResourcesStruct> resources) throws (1: PublicStruct.InvalidOperation ex);
+
+    list<PublicStruct.ResourcesStruct> imgs(1: i64 id) throws (1: PublicStruct.InvalidOperation ex);
 }

@@ -97,6 +97,24 @@ struct AppStruct {
     11: bool black
     12: i64 active_id
 }
+struct AppRequireStruct {
+    1: i64 id,
+    2: string name,
+    3: i64 resources_id,
+    4: i32 type,
+    5: string memo
+}
+struct AppWhiteStruct {
+    1: i64 id,
+    2: string name,
+    3: i64 resources_id,
+    4: string memo,
+    5: string version,
+    6: i64 brand_id,
+    7: i64 model_id,
+    8: i64 version_id,
+    9: i64 base_version_id
+}
 struct AppActiveStruct {
     1: i64 id,
     2: string name,
