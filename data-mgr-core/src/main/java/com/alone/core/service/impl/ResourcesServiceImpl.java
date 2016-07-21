@@ -1,29 +1,20 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
-import com.alone.common.dto.Page;
-import com.alone.common.entity.Box;
 import com.alone.common.entity.Resources;
 import com.alone.common.entity.Version;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
-import com.alone.core.mapper.BoxMapper;
 import com.alone.core.mapper.ResourcesMapper;
 import com.alone.core.mapper.VersionMapper;
-import com.alone.thrift.service.BoxService;
 import com.alone.thrift.service.ResourcesService;
-import com.alone.thrift.struct.*;
+import com.alone.thrift.struct.InvalidOperation;
+import com.alone.thrift.struct.ResourcesStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhouxianjun(Alone)
@@ -48,5 +39,13 @@ public class ResourcesServiceImpl implements ResourcesService.Iface {
         Version version = versionMapper.selectByPrimaryKey(id);
         Resources resources = resourcesMapper.selectByPrimaryKey(version.getResource());
         return Utils.java2Thrift(new ResourcesStruct().setCreate_time(resources.getCreate_time().getTime()), resources);
+    }
+
+    @Override
+    public ResourcesStruct getByMD5(String md5) throws InvalidOperation, TException {
+        Resources resources = new Resources();
+        resources.setMd5(md5);
+        resources = resourcesMapper.selectOne(resources);
+        return resources == null ? new ResourcesStruct() : Utils.java2Thrift(new ResourcesStruct().setCreate_time(resources.getCreate_time().getTime()), resources);
     }
 }

@@ -86,6 +86,13 @@ public class AppServiceImpl implements AppService.Iface {
         App app = appMapper.selectByPrimaryKey(id);
         if (app == null)
             throw new InvalidOperation(500, "应用不存在");
+        if (resources.getId() > 0) {
+            Resources db = resourcesMapper.selectByPrimaryKey(resources.getId());
+            if (db != null) {
+                app.setResources_id(resources.getId());
+                return appMapper.updateByPrimaryKeySelective(app) > 0;
+            }
+        }
         Resources r = new Resources();
         Utils.java2Thrift(r, resources);
         r.setId(Utils.generateUUID());
@@ -116,13 +123,23 @@ public class AppServiceImpl implements AppService.Iface {
                     }
                 }
                 if (isAdd) {
-                    Resources r = new Resources();
-                    Utils.java2Thrift(r, resource);
-                    r.setId(Utils.generateUUID());
-                    r.setCreate_time(new Date());
-                    resourcesMapper.insertSelective(r);
+                    Long rid = null;
+                    if (resource.getId() > 0) {
+                        Resources db = resourcesMapper.selectByPrimaryKey(resource.getId());
+                        if (db != null) {
+                            rid = db.getId();
+                        }
+                    }
+                    if (rid == null) {
+                        Resources r = new Resources();
+                        Utils.java2Thrift(r, resource);
+                        r.setId(Utils.generateUUID());
+                        r.setCreate_time(new Date());
+                        resourcesMapper.insertSelective(r);
+                        rid = r.getId();
+                    }
                     AppImg img = new AppImg();
-                    img.setResources_id(r.getId());
+                    img.setResources_id(rid);
                     img.setApp_id(id);
                     appImgMapper.insert(img);
                 }
