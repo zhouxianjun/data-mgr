@@ -17,7 +17,7 @@
                     ORDER BY v.version_code ${sortDir}
                 </when>
                 <otherwise>
-                    ORDER BY ${sortName} ${sortDir}
+                    ORDER BY b.${sortName} ${sortDir}
                 </otherwise>
             </choose>
         </if>

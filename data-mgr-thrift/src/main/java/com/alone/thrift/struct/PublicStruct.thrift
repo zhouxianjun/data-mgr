@@ -124,6 +124,32 @@ struct AppActiveStruct {
     6: i32 show_time,
     7: bool open_network
 }
+struct PackageStruct {
+    1: i64 id,
+    2: string name,
+    3: double price
+}
+struct AppPackageStruct {
+    1: i64 id,
+    2: string name,
+    3: bool common,
+    4: bool root,
+    5: optional i64 brand_id,
+    6: optional i64 model_id,
+    7: optional i64 version_id,
+    8: optional i64 base_version_id,
+    9: i64 package_id,
+    10: optional list<i64> pre,
+    11: optional list<i64> install
+}
+struct RequirePackageStruct {
+    1: i64 id,
+    2: string name,
+    3: string android_version,
+    4: bool root,
+    5: optional list<i64> pre,
+    6: optional list<i64> install
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

@@ -1,6 +1,6 @@
 package com.alone.core.mapper;
 
-import com.alone.common.entity.App;
+import com.alone.common.entity.AppRequire;
 import com.alone.core.PageMapper;
 
 /**
@@ -9,5 +9,6 @@ import com.alone.core.PageMapper;
  * @Description:
  * @date 16-7-7 下午9:55
  */
-public interface AppMapper extends PageMapper<App> {
+public interface AppRequireMapper extends PageMapper<AppRequire> {
+
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.PackageMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT * FROM t_package
+        <if test="sortName != null">
+            ORDER BY ${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="listPackageByPage" resultType="java.util.HashMap">
+        SELECT * FROM t_app_package WHERE package_id = #{id}
+    </select>
+</mapper>

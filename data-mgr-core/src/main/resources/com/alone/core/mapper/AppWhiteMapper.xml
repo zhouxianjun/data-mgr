@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.AppWhiteMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT app.*,
+          r.size as resources_size, r.name as resources_name, r.md5 as resources_md5, r.create_time as resources_time, r.name as resources_name
+        FROM t_app_white app
+        LEFT JOIN t_resources r ON r.id = app.resources_id
+        <if test="sortName != null">
+            ORDER BY app.${sortName} ${sortDir}
+        </if>
+    </select>
+</mapper>

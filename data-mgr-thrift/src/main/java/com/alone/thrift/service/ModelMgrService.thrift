@@ -24,4 +24,12 @@ service ModelMgrService {
     PublicStruct.PageStruct versionByPage(1: PublicStruct.PageParamStruct page, 2: i64 model) throws (1: PublicStruct.InvalidOperation ex);
 
     PublicStruct.PageStruct baseVersionByPage(1: PublicStruct.PageParamStruct page, 2: i64 version) throws (1: PublicStruct.InvalidOperation ex);
+
+    string brandList() throws (1: PublicStruct.InvalidOperation ex);
+
+    string modelList(1: i64 brand) throws (1: PublicStruct.InvalidOperation ex);
+
+    string versionList(1: i64 model) throws (1: PublicStruct.InvalidOperation ex);
+
+    string baseVersionList(1: i64 version) throws (1: PublicStruct.InvalidOperation ex);
 }

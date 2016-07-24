@@ -2,11 +2,13 @@ package com.alone.core.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.Page;
 import com.alone.common.entity.MobileBaseVersion;
 import com.alone.common.entity.MobileBrand;
 import com.alone.common.entity.MobileModel;
 import com.alone.common.entity.MobileVersion;
+import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.Util;
 import com.alone.core.mapper.MobileBaseVersionMapper;
@@ -20,6 +22,7 @@ import com.alone.thrift.struct.PageStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
@@ -119,6 +122,8 @@ public class ModelMgrServiceImpl implements ModelMgrService.Iface {
     }
 
     @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public PageStruct modelByPage(PageParamStruct page, long brand) throws InvalidOperation, TException {
         Page p = new Page<>();
         p.setPageNum(page.getPage());
@@ -129,6 +134,8 @@ public class ModelMgrServiceImpl implements ModelMgrService.Iface {
     }
 
     @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public PageStruct versionByPage(PageParamStruct page, long model) throws InvalidOperation, TException {
         Page p = new Page<>();
         p.setPageNum(page.getPage());
@@ -139,6 +146,8 @@ public class ModelMgrServiceImpl implements ModelMgrService.Iface {
     }
 
     @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     public PageStruct baseVersionByPage(PageParamStruct page, long version) throws InvalidOperation, TException {
         Page p = new Page<>();
         p.setPageNum(page.getPage());
@@ -146,5 +155,58 @@ public class ModelMgrServiceImpl implements ModelMgrService.Iface {
         List list = mobileBaseVersionMapper.listByPageByVersion(p, version, page.getSortName(), page.getSortDir());
         return new PageStruct(p.getPageNum(), p.getPageSize(),
                 p.getCount(), page.getPage(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));
+    }
+
+    @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    public String brandList() throws InvalidOperation, TException {
+        List<MobileBrand> list = mobileBrandMapper.selectAll();
+        return JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue);
+    }
+
+    @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    public String modelList(long brand) throws InvalidOperation, TException {
+        List<MobileModel> list;
+        if (brand > 0) {
+            Example select = new Example(MobileModel.class);
+            select.createCriteria().andEqualTo("brand_id", brand);
+            list = mobileModelMapper.selectByExample(select);
+        } else {
+            list = mobileModelMapper.selectAll();
+        }
+        return JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue);
+    }
+
+    @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    public String versionList(long model) throws InvalidOperation, TException {
+        List<MobileVersion> list;
+        if (model > 0) {
+            Example select = new Example(MobileVersion.class);
+            select.createCriteria().andEqualTo("model_id", model);
+            list = mobileVersionMapper.selectByExample(select);
+        } else {
+            list = mobileVersionMapper.selectAll();
+        }
+        return JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue);
+    }
+
+    @Override
+    @DataSource(DataSourceType.READ)
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    public String baseVersionList(long version) throws InvalidOperation, TException {
+        List<MobileBaseVersion> list;
+        if (version > 0) {
+            Example select = new Example(MobileBaseVersion.class);
+            select.createCriteria().andEqualTo("version_id", version);
+            list = mobileBaseVersionMapper.selectByExample(select);
+        } else {
+            list = mobileBaseVersionMapper.selectAll();
+        }
+        return JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue);
     }
 }

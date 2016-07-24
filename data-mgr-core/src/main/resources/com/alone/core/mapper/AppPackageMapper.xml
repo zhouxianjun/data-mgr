@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.AppPackageMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT
+          ap.*, (
+            SELECT
+              COUNT(*)
+            FROM
+              t_package_app
+            WHERE
+              app_package_id = ap.id
+          ) AS app_count,
+          (
+            SELECT
+              IFNULL(SUM(r.size),0)
+            FROM
+              t_resources r
+            LEFT JOIN t_app a ON a.resources_id = r.id
+            LEFT JOIN t_package_app pa ON pa.app_id = a.id
+            WHERE
+              pa.app_package_id = ap.id
+          ) app_size
+        FROM
+          t_app_package ap
+        <if test="sortName != null">
+            <choose>
+                <when test="sortName == 'app_size'">
+                    ORDER BY app_size ${sortDir}
+                </when>
+                <when test="sortName == 'app_count'">
+                    ORDER BY app_count ${sortDir}
+                </when>
+                <otherwise>
+                    ORDER BY ap.${sortName} ${sortDir}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <select id="listAppByPage" resultType="java.util.HashMap">
+        SELECT a.* FROM t_app a
+        LEFT JOIN t_package_app pa ON pa.app_id = a.id
+        WHERE pa.type = #{type} and pa.app_package_id = #{id}
+        <if test="sortName != null">
+            ORDER BY a.${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="appAllList" resultType="App">
+        SELECT a.* FROM t_app a
+        LEFT JOIN t_package_app pa ON pa.app_id = a.id
+        WHERE pa.app_package_id = #{id}
+        <if test="type != null">
+            and pa.type = #{type}
+        </if>
+    </select>
+</mapper>

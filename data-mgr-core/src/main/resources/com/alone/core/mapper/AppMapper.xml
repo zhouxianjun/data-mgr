@@ -17,15 +17,9 @@
                     ORDER BY r.size ${sortDir}
                 </when>
                 <otherwise>
-                    ORDER BY ${sortName} ${sortDir}
+                    ORDER BY app.${sortName} ${sortDir}
                 </otherwise>
             </choose>
         </if>
-    </select>
-
-    <select id="getImgs" resultType="Resources">
-        SELECT r.* FROM t_resources r
-        LEFT JOIN t_app_img ai ON ai.resources_id = r.id
-        WHERE ai.app_id = #{id}
     </select>
 </mapper>
