@@ -68,7 +68,9 @@ public class AppWhiteServiceImpl implements AppWhiteService.Iface {
         AppWhite app = appWhiteMapper.selectByPrimaryKey(id);
         if (app == null)
             throw new InvalidOperation(500, "应用不存在");
-        long rid = Util.changeAppFile(id, resources, resourcesMapper);
+        Long rid = Util.changeAppFile(resources, resourcesMapper);
+        if (rid == null)
+            throw new InvalidOperation(500, "操作失败");
         app.setResources_id(rid);
         return appWhiteMapper.updateByPrimaryKeySelective(app) > 0;
     }

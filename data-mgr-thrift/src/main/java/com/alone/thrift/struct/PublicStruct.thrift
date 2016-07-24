@@ -150,6 +150,33 @@ struct RequirePackageStruct {
     5: optional list<i64> pre,
     6: optional list<i64> install
 }
+struct RootModelStruct {
+    1: i64 id,
+    2: i64 brand_id,
+    3: i64 model_id,
+    4: i64 version_id,
+    5: i64 base_version_id
+}
+struct RootConfigStruct {
+    1: i64 id,
+    2: string name,
+    3: string version,
+    4: string memo,
+    5: i64 resources_id
+}
+struct PushStruct {
+    1: i64 id,
+    2: i64 user_id,
+    3: string name,
+    4: i32 type,
+    5: optional ResourcesStruct img,
+    6: optional string text,
+    7: i32 client_type,
+    8: optional ResourcesStruct app,
+    9: optional double deduct,
+    10: optional string url,
+    11: i32 status
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

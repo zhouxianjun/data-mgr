@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.PushMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT p.*,
+        img_r.size as img_size,
+        img_r.name as img_name,
+        img_r.md5 as img_md5,
+        img_r.create_time as img_time,
+        app_r.size as app_size,
+        app_r.name as app_name,
+        app_r.md5 as app_md5,
+        app_r.create_time as app_time,
+        u.name AS ow
+        FROM t_push p
+        LEFT JOIN t_resources img_r ON img_r.id = p.img_resources_id
+        LEFT JOIN t_resources app_r ON app_r.id = p.app_resources_id
+        LEFT JOIN t_user u ON u.id = p.user_id
+        <if test="sortName != null">
+            <choose>
+                <when test="sortName == 'ow'">
+                    ORDER BY u.name ${sortDir}
+                </when>
+                <otherwise>
+                    ORDER BY p.${sortName} ${sortDir}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+</mapper>

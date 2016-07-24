@@ -68,13 +68,16 @@ public class Util {
         return true;
     }
 
-    public static long changeAppFile(long id, ResourcesStruct resources, Mapper<Resources> resourcesMapper) {
+    public static Long changeAppFile(ResourcesStruct resources, Mapper<Resources> resourcesMapper) {
+        if (resources == null) return null;
         if (resources.getId() > 0) {
             Resources db = resourcesMapper.selectByPrimaryKey(resources.getId());
             if (db != null) {
                 return resources.getId();
             }
         }
+        if (StringUtils.isEmpty(resources.getMd5()))
+            return null;
         Resources r = new Resources();
         Utils.java2Thrift(r, resources);
         r.setId(Utils.generateUUID());

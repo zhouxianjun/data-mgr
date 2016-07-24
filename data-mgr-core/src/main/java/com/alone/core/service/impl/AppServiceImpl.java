@@ -79,7 +79,9 @@ public class AppServiceImpl implements AppService.Iface {
         App app = appMapper.selectByPrimaryKey(id);
         if (app == null)
             throw new InvalidOperation(500, "应用不存在");
-        long rid = Util.changeAppFile(id, resources, resourcesMapper);
+        Long rid = Util.changeAppFile(resources, resourcesMapper);
+        if (rid == null)
+            throw new InvalidOperation(500, "操作失败");
         app.setResources_id(rid);
         return appMapper.updateByPrimaryKeySelective(app) > 0;
     }

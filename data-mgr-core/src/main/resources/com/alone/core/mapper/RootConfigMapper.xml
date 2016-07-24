@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.RootConfigMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT rc.*,
+          r.size as resources_size, r.name as resources_name, r.md5 as resources_md5, r.create_time as resources_time
+        FROM t_root_config rc
+        LEFT JOIN t_resources r ON r.id = rc.resources_id
+        <if test="sortName != null">
+            ORDER BY rc.${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="listModelByPage" resultType="java.util.HashMap">
+        SELECT rm.*, mb.name AS brand_name, mm.name AS model_name, mv.name AS version_name, mbv.name AS base_version_name
+        FROM t_root_model rm
+        LEFT JOIN t_mobile_brand mb ON mb.id = rm.brand_id
+        LEFT JOIN t_mobile_model mm ON mm.id = rm.model_id
+        LEFT JOIN t_mobile_version mv ON mv.id = rm.version_id
+        LEFT JOIN t_mobile_base_version mbv ON mbv.id = rm.base_version_id
+        WHERE root_id = #{id}
+        <if test="sortName != null">
+            ORDER BY rm.${sortName} ${sortDir}
+        </if>
+    </select>
+</mapper>
