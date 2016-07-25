@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  * @Description:
  * @date 2016/7/18 11:05
  */
-@Component
+//@Component
 @Slf4j
 public class JmsMessProducer {
     @Resource(name = "topic-box")

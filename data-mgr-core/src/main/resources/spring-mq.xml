@@ -15,24 +15,24 @@
        default-autowire="byName" default-lazy-init="false">
 
     <!-- activeMQ 连接工厂 -->
-    <amq:connectionFactory id="targetConnFactory" brokerURL="tcp://127.0.0.1:61616?connectionTimeout=3000" clientIDPrefix="data-mgr-core"/>
+   <!-- <amq:connectionFactory id="targetConnFactory" brokerURL="tcp://127.0.0.1:61616?connectionTimeout=3000" clientIDPrefix="data-mgr-core"/>
 
-    <!-- spring jms 连接工厂,因为使用了activeMQ的池化工厂，所以这里不用CacheConnectionFactory -->
+    &lt;!&ndash; spring jms 连接工厂,因为使用了activeMQ的池化工厂，所以这里不用CacheConnectionFactory &ndash;&gt;
     <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
         <property name="targetConnectionFactory" ref="targetConnFactory" />
         <property name="sessionCacheSize" value="10" />
     </bean>
 
-    <!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->
+    &lt;!&ndash; Spring提供的JMS工具类，它可以进行消息发送、接收等 &ndash;&gt;
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="deliveryMode" value="2"/>
         <property name="pubSubDomain" value="true" />
     </bean>
 
-    <!-- 消息主题 -->
+    &lt;!&ndash; 消息主题 &ndash;&gt;
     <amq:topic id="topic-box" name="topic-box" physicalName="t.core.box"/>
-    <amq:topic id="topic-sdk" name="topic-sdk" physicalName="t.core.sdk"/>
+    <amq:topic id="topic-sdk" name="topic-sdk" physicalName="t.core.sdk"/>-->
     <!-- 接收队列 -->
     <!--<amq:queue id="queue-box" name="queue-box" physicalName="q.core.box"/>
     <amq:queue id="queue-sdk" name="queue-sdk" physicalName="q.core.sdk"/>
