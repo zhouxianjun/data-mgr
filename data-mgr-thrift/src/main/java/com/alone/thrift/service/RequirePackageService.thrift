@@ -14,4 +14,6 @@ service RequirePackageService {
     string appAllList(1: i64 id, 2: i32 type) throws (1: PublicStruct.InvalidOperation ex);
 
     bool removeApp(1: i64 id, 2: i64 app, 3: i32 type) throws (1: PublicStruct.InvalidOperation ex);
+
+    string allList(1: i64 user) throws (1: PublicStruct.InvalidOperation ex);
 }

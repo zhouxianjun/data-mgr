@@ -78,7 +78,7 @@ public class MenuServiceImpl implements MenuService.Iface {
 
     @Override
     public long add(MenuStruct menu, long user) throws TException {
-        if (user != 1) throw new InvalidOperation(500, "没有改接口的操作权限");
+        if (user != 1) throw new InvalidOperation(500, "没有该接口的操作权限");
         String pids = "0";
         if (menu.getPid() > 0) {
             Menu parent = menuMapper.selectByPrimaryKey(menu.getPid());
@@ -122,6 +122,9 @@ public class MenuServiceImpl implements MenuService.Iface {
     public boolean delMenu(long id) throws TException {
         menuMapper.deleteMenu(id);
         menuMapper.deleteMenuInterface(id);
+        Example del = new Example(RoleMenu.class);
+        del.createCriteria().andEqualTo("role_id", 1L).andEqualTo("menu_id", id);
+        roleMenuMapper.deleteByExample(del);
         return true;
     }
 

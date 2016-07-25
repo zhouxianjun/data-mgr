@@ -7,11 +7,14 @@ import com.alone.common.dto.Page;
 import com.alone.common.entity.App;
 import com.alone.common.entity.AppPackage;
 import com.alone.common.entity.PackageApp;
+import com.alone.common.entity.UserRef;
+import com.alone.common.enums.RefType;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.Util;
 import com.alone.core.mapper.AppPackageMapper;
 import com.alone.core.mapper.PackageAppMapper;
+import com.alone.core.mapper.UserRefMapper;
 import com.alone.thrift.service.AppPackageService;
 import com.alone.thrift.struct.AppPackageStruct;
 import com.alone.thrift.struct.InvalidOperation;
@@ -40,6 +43,8 @@ public class AppPackageServiceIMpl implements AppPackageService.Iface {
     private AppPackageMapper appPackageMapper;
     @Autowired
     private PackageAppMapper packageAppMapper;
+    @Autowired
+    private UserRefMapper userRefMapper;
 
     @Override
     public long add(AppPackageStruct bean) throws InvalidOperation, TException {
@@ -50,6 +55,12 @@ public class AppPackageServiceIMpl implements AppPackageService.Iface {
         appPackageMapper.insertSelective(aPackage);
 
         Util.checkApps(bean.getPre(), bean.getInstall(), aPackage.getId(), packageAppMapper);
+
+        UserRef ref = new UserRef();
+        ref.setUser_id(1L);
+        ref.setRef_id(aPackage.getId());
+        ref.setType(RefType.APP_PACKAGE.getVal());
+        userRefMapper.insert(ref);
         return aPackage.getId();
     }
 
@@ -68,6 +79,9 @@ public class AppPackageServiceIMpl implements AppPackageService.Iface {
         Example del = new Example(PackageApp.class);
         del.createCriteria().andEqualTo("app_package_id", id);
         packageAppMapper.deleteByExample(del);
+        Example delRef = new Example(UserRef.class);
+        delRef.createCriteria().andEqualTo("user_id", 1L).andEqualTo("ref_id", id).andEqualTo("type", RefType.APP_PACKAGE.getVal());
+        userRefMapper.deleteByExample(delRef);
         if (appPackageMapper.deleteByPrimaryKey(id) <= 0) {
             throw new InvalidOperation(500, "操作失败");
         }
@@ -104,5 +118,15 @@ public class AppPackageServiceIMpl implements AppPackageService.Iface {
     public String appAllList(long id, int type) throws InvalidOperation, TException {
         List<App> list = appPackageMapper.appAllList(id, type > 0 ? type : null);
         return JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue);
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
+    public String allList(long user) throws InvalidOperation, TException {
+        if (user > 0) {
+            return JSONArray.toJSONString(appPackageMapper.allList(user), SerializerFeature.WriteMapNullValue);
+        }
+        return JSONArray.toJSONString(appPackageMapper.selectAll(), SerializerFeature.WriteMapNullValue);
     }
 }

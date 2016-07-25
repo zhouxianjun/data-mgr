@@ -1,6 +1,6 @@
 package com.alone.core.mapper;
 
-import com.alone.common.entity.AppWhite;
+import com.alone.common.entity.InstallActive;
 import com.alone.core.PageMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,6 +12,6 @@ import java.util.List;
  * @Description:
  * @date 16-7-7 下午9:55
  */
-public interface AppWhiteMapper extends PageMapper<AppWhite> {
-    List<AppWhite> allList(@Param("user") Long user);
+public interface InstallActiveMapper extends PageMapper<InstallActive> {
+    List<InstallActive> allList(@Param("user") Long user);
 }

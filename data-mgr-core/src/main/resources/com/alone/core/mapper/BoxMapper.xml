@@ -22,4 +22,16 @@
             </choose>
         </if>
     </select>
+
+    <select id="allList" resultType="Box">
+        SELECT
+          b.*
+        FROM
+          t_box b
+        LEFT JOIN t_user_ref ur ON ur.ref_id = b.id
+        LEFT JOIN t_user u ON u.id = ur.user_id
+        WHERE
+          ur.type = 1
+        AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+    </select>
 </mapper>

@@ -58,4 +58,16 @@
             and pa.type = #{type}
         </if>
     </select>
+
+    <select id="allList" resultType="AppPackage">
+        SELECT
+            ap.*
+        FROM
+            t_app_package ap
+        LEFT JOIN t_user_ref ur ON ur.ref_id = ap.id
+        LEFT JOIN t_user u ON u.id = ur.user_id
+        WHERE
+            ur.type = 2
+        AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+    </select>
 </mapper>

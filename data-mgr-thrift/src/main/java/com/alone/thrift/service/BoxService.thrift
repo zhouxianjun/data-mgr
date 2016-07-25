@@ -10,4 +10,6 @@ service BoxService {
     PublicStruct.VersionStruct updateVersion(1: PublicStruct.ResourcesStruct resources, 2: PublicStruct.VersionStruct version, 3: i64 id) throws (1: PublicStruct.InvalidOperation ex);
 
     bool remove(1: i64 id) throws (1: PublicStruct.InvalidOperation ex);
+
+    string allList(1: i64 user) throws (1: PublicStruct.InvalidOperation ex);
 }

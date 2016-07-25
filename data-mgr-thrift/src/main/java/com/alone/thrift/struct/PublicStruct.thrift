@@ -177,6 +177,12 @@ struct PushStruct {
     10: optional string url,
     11: i32 status
 }
+struct InstallActiveStruct {
+    1: i64 id,
+    2: string name,
+    3: string memo,
+    4: i32 hours
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

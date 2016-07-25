@@ -20,4 +20,6 @@ public interface RequirePackageMapper extends PageMapper<RequirePackage> {
                                             @Param("sortName") String sortName, @Param("sortDir") String sortDir);
 
     List<AppRequire> appAllList(@Param("id") Long id, @Param("type") Integer type);
+
+    List<RequirePackage> allList(@Param("user") Long user);
 }

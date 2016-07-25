@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.InstallActiveMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT * FROM t_install_active
+        <if test="sortName != null">
+          ORDER BY ${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="allList" resultType="InstallActive">
+        SELECT
+          ia.*
+        FROM
+          t_install_active ia
+        LEFT JOIN t_user_ref ur ON ur.ref_id = ia.id
+        LEFT JOIN t_user u ON u.id = ur.user_id
+        WHERE
+          ur.type = 5
+        AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+    </select>
+</mapper>

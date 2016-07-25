@@ -5,12 +5,14 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.Page;
 import com.alone.common.entity.*;
+import com.alone.common.enums.RefType;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.Util;
 import com.alone.core.mapper.AppPackageMapper;
 import com.alone.core.mapper.PackageAppMapper;
 import com.alone.core.mapper.RequirePackageMapper;
+import com.alone.core.mapper.UserRefMapper;
 import com.alone.thrift.service.AppPackageService;
 import com.alone.thrift.service.RequirePackageService;
 import com.alone.thrift.struct.*;
@@ -37,6 +39,8 @@ public class RequirePackageServiceIMpl implements RequirePackageService.Iface {
     private RequirePackageMapper requirePackageMapper;
     @Autowired
     private PackageAppMapper packageAppMapper;
+    @Autowired
+    private UserRefMapper userRefMapper;
 
     @Override
     public long add(RequirePackageStruct bean) throws InvalidOperation, TException {
@@ -47,6 +51,12 @@ public class RequirePackageServiceIMpl implements RequirePackageService.Iface {
         requirePackageMapper.insertSelective(aPackage);
 
         Util.checkApps(bean.getPre(), bean.getInstall(), aPackage.getId(), packageAppMapper);
+
+        UserRef ref = new UserRef();
+        ref.setUser_id(1L);
+        ref.setRef_id(aPackage.getId());
+        ref.setType(RefType.REQUIRE_PACKAGE.getVal());
+        userRefMapper.insert(ref);
         return aPackage.getId();
     }
 
@@ -66,6 +76,9 @@ public class RequirePackageServiceIMpl implements RequirePackageService.Iface {
         Example del = new Example(PackageApp.class);
         del.createCriteria().andEqualTo("app_package_id", id);
         packageAppMapper.deleteByExample(del);
+        Example delRef = new Example(UserRef.class);
+        delRef.createCriteria().andEqualTo("user_id", 1L).andEqualTo("ref_id", id).andEqualTo("type", RefType.REQUIRE_PACKAGE.getVal());
+        userRefMapper.deleteByExample(delRef);
         if (requirePackageMapper.deleteByPrimaryKey(id) <= 0) {
             throw new InvalidOperation(500, "操作失败");
         }
@@ -102,5 +115,15 @@ public class RequirePackageServiceIMpl implements RequirePackageService.Iface {
         Example del = new Example(PackageApp.class);
         del.createCriteria().andEqualTo("app_package_id", id).andEqualTo("app_id", app).andEqualTo("type", type);
         return packageAppMapper.deleteByExample(del) > 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
+    public String allList(long user) throws InvalidOperation, TException {
+        if (user > 0) {
+            return JSONArray.toJSONString(requirePackageMapper.allList(user), SerializerFeature.WriteMapNullValue);
+        }
+        return JSONArray.toJSONString(requirePackageMapper.selectAll(), SerializerFeature.WriteMapNullValue);
     }
 }
