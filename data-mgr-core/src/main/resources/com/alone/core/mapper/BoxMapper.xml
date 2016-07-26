@@ -34,4 +34,10 @@
           ur.type = 1
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
     </select>
+
+    <select id="getNewVersion" resultType="Version">
+        SELECT v.* FROM t_version v
+        LEFT JOIN t_box b ON b.version_id = v.id
+        WHERE b.box_id = #{box}
+    </select>
 </mapper>

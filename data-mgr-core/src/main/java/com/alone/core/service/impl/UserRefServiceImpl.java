@@ -1,30 +1,17 @@
 package com.alone.core.service.impl;
 
-import com.alone.common.dto.DataSourceType;
-import com.alone.common.entity.App;
-import com.alone.common.entity.AppActive;
 import com.alone.common.entity.UserRef;
 import com.alone.common.enums.RefType;
-import com.alone.common.mybatis.DataSource;
-import com.alone.common.util.Utils;
-import com.alone.core.Util;
-import com.alone.core.mapper.AppActiveMapper;
 import com.alone.core.mapper.AppMapper;
 import com.alone.core.mapper.UserRefMapper;
-import com.alone.thrift.service.AppActiveService;
 import com.alone.thrift.service.UserRefService;
-import com.alone.thrift.struct.AppActiveStruct;
 import com.alone.thrift.struct.InvalidOperation;
-import com.alone.thrift.struct.PageParamStruct;
-import com.alone.thrift.struct.PageStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
 import java.util.List;
 
 /**

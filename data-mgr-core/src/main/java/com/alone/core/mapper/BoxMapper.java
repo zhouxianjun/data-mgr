@@ -1,6 +1,7 @@
 package com.alone.core.mapper;
 
 import com.alone.common.entity.Box;
+import com.alone.common.entity.Version;
 import com.alone.core.PageMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface BoxMapper extends PageMapper<Box> {
     List<Box> allList(@Param("user") Long user);
+
+    Version getNewVersion(@Param("box") String box);
 }

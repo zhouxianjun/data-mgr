@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.UserRefMapper">
+    <select id="getBox" resultType="Box">
+        SELECT b.* FROM t_box b
+        LEFT JOIN t_user_ref ur ON ur.ref_id = b.id
+        WHERE ur.user_id = #{user} and ur.type = 1 and b.box_id = #{box}
+    </select>
+</mapper>
