@@ -10,15 +10,18 @@
         FROM
             t_interface i
         LEFT JOIN t_menu_interface mi ON mi.interface_id = i.id
-        LEFT JOIN t_role_menu rm ON rm.menu_id = mi.menu_id
+        LEFT JOIN t_menu m ON m.id = mi.menu_id
+        LEFT JOIN t_role_menu rm ON rm.menu_id = m.id
         LEFT JOIN t_user_role ur ON ur.role_id = rm.role_id
         WHERE
             ur.user_id = #{user}
             <if test="enable != null and enable == true">
                 and i.status = 1
+                and m.status = 1
             </if>
             <if test="enable != null and enable == false">
                 and i.status = 0
+                and m.status = 0
             </if>
         UNION
         SELECT
@@ -26,7 +29,8 @@
         FROM
             t_interface i
         LEFT JOIN t_menu_interface mi ON mi.interface_id = i.id
-        LEFT JOIN t_role_menu rm ON rm.menu_id = mi.menu_id
+        LEFT JOIN t_menu m ON m.id = mi.menu_id
+        LEFT JOIN t_role_menu rm ON rm.menu_id = m.id
         LEFT JOIN t_role r ON r.id = rm.role_id,
          (
             SELECT
@@ -41,9 +45,11 @@
             FIND_IN_SET(t.id, r.pids)
             <if test="enable != null and enable == true">
                 and i.status = 1
+                and m.status = 1
             </if>
             <if test="enable != null and enable == false">
                 and i.status = 0
+                and m.status = 0
             </if>
         GROUP BY
             i.id

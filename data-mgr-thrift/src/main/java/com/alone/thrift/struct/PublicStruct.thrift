@@ -19,7 +19,8 @@ struct MenuStruct {
     8: optional string path,
     9: string target,
     10: optional string icon,
-    11: optional bool ow
+    11: optional bool ow,
+    12: bool show
 }
 struct InterfaceStruct {
     1: i64 id,
@@ -109,11 +110,7 @@ struct AppWhiteStruct {
     2: string name,
     3: i64 resources_id,
     4: string memo,
-    5: string version,
-    6: i64 brand_id,
-    7: i64 model_id,
-    8: i64 version_id,
-    9: i64 base_version_id
+    5: string version
 }
 struct AppActiveStruct {
     1: i64 id,
@@ -150,7 +147,7 @@ struct RequirePackageStruct {
     5: optional list<i64> pre,
     6: optional list<i64> install
 }
-struct RootModelStruct {
+struct ModelRefStruct {
     1: i64 id,
     2: i64 brand_id,
     3: i64 model_id,

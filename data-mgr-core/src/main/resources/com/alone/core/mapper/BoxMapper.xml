@@ -33,6 +33,7 @@
         WHERE
           ur.type = 1
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+        GROUP BY b.id
     </select>
 
     <select id="getNewVersion" resultType="Version">

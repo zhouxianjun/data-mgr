@@ -59,6 +59,20 @@
         </if>
     </select>
 
+    <select id="appAndResourcesAllList" resultType="java.util.HashMap">
+        SELECT a.*, pa.type AS install_type,
+        r.name AS resources_name, r.md5, r.size,
+        aa.open_count, aa.flow, aa.stay_days, aa.show_time, aa.open_network AS active_open_network
+        FROM t_app a
+        LEFT JOIN t_package_app pa ON pa.app_id = ar.id
+        LEFT JOIN t_resources r ON r.id = a.resources_id
+        LEFT JOIN t_app_active aa ON aa.id = a.active_id
+        WHERE pa.app_package_id = #{id}
+        <if test="type != null">
+            and pa.type = #{type}
+        </if>
+    </select>
+
     <select id="allList" resultType="AppPackage">
         SELECT
             ap.*
@@ -69,5 +83,6 @@
         WHERE
             ur.type = 2
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+        GROUP BY ap.id
     </select>
 </mapper>

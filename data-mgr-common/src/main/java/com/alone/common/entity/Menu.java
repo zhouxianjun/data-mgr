@@ -2,6 +2,7 @@ package com.alone.common.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,12 +22,14 @@ public class Menu implements Serializable {
 
     private Long pid;
 
+    @Column(name = "`name`")
     private String name;
 
     private String description;
 
     private Integer seq;
 
+    @Column(name = "`status`")
     private Boolean status;
 
     private Date create_time;
@@ -38,4 +41,7 @@ public class Menu implements Serializable {
     private String icon;
 
     private String pids;
+
+    @Column(name = "`show`")
+    private Boolean show;
 }

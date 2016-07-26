@@ -21,5 +21,6 @@
         WHERE
           ur.type = 5
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+        GROUP BY ia.id
     </select>
 </mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.ModelRefMapper">
+    <select id="listModelByPage" resultType="java.util.HashMap">
+        SELECT rm.*, mb.name AS brand_name, mm.name AS model_name, mv.name AS version_name, mbv.name AS base_version_name
+        FROM t_model_ref rm
+        LEFT JOIN t_mobile_brand mb ON mb.id = rm.brand_id
+        LEFT JOIN t_mobile_model mm ON mm.id = rm.model_id
+        LEFT JOIN t_mobile_version mv ON mv.id = rm.version_id
+        LEFT JOIN t_mobile_base_version mbv ON mbv.id = rm.base_version_id
+        WHERE ref_id = #{id} and rm.type = #{type}
+        <if test="sortName != null">
+            ORDER BY rm.${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="selectAllModel" resultType="java.util.HashMap">
+        SELECT
+            mb.id AS brand_id,
+            mb.`name` AS brand_name,
+            mm.id AS model_id,
+            mm.`name` AS model_name,
+            mv.id AS version_id,
+            mv.`name` AS version_name,
+            mbv.id AS base_version_id,
+            mbv.`name` AS base_version_name
+        FROM
+            t_mobile_brand mb
+        LEFT JOIN t_mobile_model mm ON mm.brand_id = mb.id
+        LEFT JOIN t_mobile_version mv ON mv.model_id = mm.id
+        LEFT JOIN t_mobile_base_version mbv ON mbv.version_id = mv.id
+    </select>
+</mapper>

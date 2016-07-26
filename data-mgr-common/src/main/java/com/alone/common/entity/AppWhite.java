@@ -24,15 +24,9 @@ public class AppWhite {
 
     private String version;
 
+    private String memo;
+
     private Long resources_id;
-
-    private Long brand_id;
-
-    private Long model_id;
-
-    private Long version_id;
-
-    private Long base_version_id;
 
     private Date create_time;
 }

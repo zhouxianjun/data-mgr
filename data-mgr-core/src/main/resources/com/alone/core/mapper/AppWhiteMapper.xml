@@ -24,5 +24,38 @@
         WHERE
           ur.type = 4
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+        GROUP BY aw.id
+    </select>
+
+    <select id="allAndResourcesListByModel" resultType="java.util.HashMap">
+        SELECT
+            aw.*,
+            r.name AS resources_name, r.md5, r.size
+        FROM
+            t_app_white aw
+        LEFT JOIN t_model_ref mr ON mr.ref_id = aw.id
+        LEFT JOIN t_user_ref ur ON ur.ref_id = aw.id
+        LEFT JOIN t_user u ON u.id = ur.user_id
+        LEFT JOIN t_resources r ON r.id = aw.resources_id
+        WHERE
+          ur.type = 4
+        AND mr.type = 2
+        <if test="brand_id != null">
+            AND mr.brand_id = #{brand_id}
+        </if>
+        <if test="model_id != null">
+            AND mr.model_id = #{model_id}
+        </if>
+        <if test="version_id != null">
+            AND mr.version_id = #{version_id}
+        </if>
+        <if test="base_version_id != null">
+            AND mr.base_version_id = #{base_version_id}
+        </if>
+        AND (
+            FIND_IN_SET(#{user}, u.pids)
+            OR u.id = #{user}
+        )
+        GROUP BY aw.id
     </select>
 </mapper>

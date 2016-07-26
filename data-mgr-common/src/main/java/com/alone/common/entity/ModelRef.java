@@ -12,8 +12,8 @@ import javax.persistence.Table;
  * @date 16-7-24 上午11:27
  */
 @Data
-@Table(name = "t_root_model")
-public class RootModel {
+@Table(name = "t_model_ref")
+public class ModelRef {
     @Id
     private Long id;
 
@@ -25,5 +25,7 @@ public class RootModel {
 
     private Long base_version_id;
 
-    private Long root_id;
+    private Long ref_id;
+
+    private Integer type;
 }

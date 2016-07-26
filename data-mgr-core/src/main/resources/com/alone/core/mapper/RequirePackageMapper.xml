@@ -59,6 +59,16 @@
         </if>
     </select>
 
+    <select id="appAndResourcesAllList" resultType="java.util.HashMap">
+        SELECT ar.*, pa.type AS install_type, r.name AS resources_name, r.md5, r.size FROM t_app_require ar
+        LEFT JOIN t_package_app pa ON pa.app_id = ar.id
+        LEFT JOIN t_resources r ON r.id = ar.resources_id
+        WHERE pa.app_package_id = #{id}
+        <if test="type != null">
+            and pa.type = #{type}
+        </if>
+    </select>
+
     <select id="allList" resultType="RequirePackage">
         SELECT
           rp.*
@@ -69,5 +79,6 @@
         WHERE
           ur.type = 3
         AND (FIND_IN_SET(#{user}, u.pids) OR u.id = #{user})
+        GROUP BY rp.id
     </select>
 </mapper>

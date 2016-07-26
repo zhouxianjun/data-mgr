@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.AppWhite;
+import com.alone.common.entity.ModelRef;
 import com.alone.common.entity.UserRef;
 import com.alone.common.enums.RefType;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
 import com.alone.core.Util;
 import com.alone.core.mapper.AppWhiteMapper;
+import com.alone.core.mapper.ModelRefMapper;
 import com.alone.core.mapper.ResourcesMapper;
 import com.alone.core.mapper.UserRefMapper;
 import com.alone.thrift.service.AppWhiteService;
@@ -39,6 +41,8 @@ public class AppWhiteServiceImpl implements AppWhiteService.Iface {
     private ResourcesMapper resourcesMapper;
     @Autowired
     private UserRefMapper userRefMapper;
+    @Autowired
+    private ModelRefMapper modelRefMapper;
 
     @Override
     public long add(AppWhiteStruct bean) throws InvalidOperation, TException {
@@ -67,9 +71,9 @@ public class AppWhiteServiceImpl implements AppWhiteService.Iface {
 
     @Override
     public boolean remove(long id) throws InvalidOperation, TException {
-        Example delRef = new Example(UserRef.class);
-        delRef.createCriteria().andEqualTo("user_id", 1L).andEqualTo("ref_id", id).andEqualTo("type", RefType.WHITE.getVal());
-        userRefMapper.deleteByExample(delRef);
+        Example del = new Example(ModelRef.class);
+        del.createCriteria().andEqualTo("ref_id", id).andEqualTo("type", 2);
+        modelRefMapper.deleteByExample(del);
         if (appWhiteMapper.deleteByPrimaryKey(id) <= 0)
             throw new InvalidOperation(500, "操作失败");
         return true;
