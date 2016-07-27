@@ -64,7 +64,7 @@
         r.name AS resources_name, r.md5, r.size,
         aa.open_count, aa.flow, aa.stay_days, aa.show_time, aa.open_network AS active_open_network
         FROM t_app a
-        LEFT JOIN t_package_app pa ON pa.app_id = ar.id
+        LEFT JOIN t_package_app pa ON pa.app_id = a.id
         LEFT JOIN t_resources r ON r.id = a.resources_id
         LEFT JOIN t_app_active aa ON aa.id = a.active_id
         WHERE pa.app_package_id = #{id}

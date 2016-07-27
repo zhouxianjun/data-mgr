@@ -29,7 +29,7 @@
         LEFT JOIN t_model_ref mr ON mr.ref_id = rc.id
         LEFT JOIN t_resources r ON r.id = rc.resources_id
         WHERE
-           mr.type = 2
+           mr.type = 1
         <if test="brand_id != null">
             AND mr.brand_id = #{brand_id}
         </if>

@@ -5,21 +5,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.*;
 import com.alone.common.mybatis.DataSource;
-import com.alone.common.util.Utils;
-import com.alone.core.Util;
 import com.alone.core.mapper.*;
 import com.alone.thrift.service.ApiService;
-import com.alone.thrift.service.AppActiveService;
 import com.alone.thrift.service.UserService;
-import com.alone.thrift.struct.*;
+import com.alone.thrift.struct.InvalidOperation;
+import com.alone.thrift.struct.UserStruct;
 import com.gary.thriftext.spring.annotation.ThriftService;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhouxianjun(Alone)
