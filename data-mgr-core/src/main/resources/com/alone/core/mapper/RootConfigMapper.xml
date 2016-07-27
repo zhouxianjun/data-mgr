@@ -30,17 +30,7 @@
         LEFT JOIN t_resources r ON r.id = rc.resources_id
         WHERE
            mr.type = 1
-        <if test="brand_id != null">
-            AND mr.brand_id = #{brand_id}
-        </if>
-        <if test="model_id != null">
-            AND mr.model_id = #{model_id}
-        </if>
-        <if test="version_id != null">
-            AND mr.version_id = #{version_id}
-        </if>
-        <if test="base_version_id != null">
-            AND mr.base_version_id = #{base_version_id}
-        </if>
+        AND mr.model_id = #{model}
+        group by rc.id
     </select>
 </mapper>

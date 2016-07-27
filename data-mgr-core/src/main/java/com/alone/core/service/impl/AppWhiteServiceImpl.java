@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.AppWhite;
-import com.alone.common.entity.ModelRef;
+import com.alone.common.entity.Model;
 import com.alone.common.entity.UserRef;
 import com.alone.common.enums.RefType;
 import com.alone.common.mybatis.DataSource;
@@ -71,7 +71,7 @@ public class AppWhiteServiceImpl implements AppWhiteService.Iface {
 
     @Override
     public boolean remove(long id) throws InvalidOperation, TException {
-        Example del = new Example(ModelRef.class);
+        Example del = new Example(Model.class);
         del.createCriteria().andEqualTo("ref_id", id).andEqualTo("type", 2);
         modelRefMapper.deleteByExample(del);
         if (appWhiteMapper.deleteByPrimaryKey(id) <= 0)

@@ -5,20 +5,26 @@
 
 <mapper namespace="com.alone.core.mapper.ModelRefMapper">
     <select id="listModelByPage" resultType="java.util.HashMap">
-        SELECT rm.*, mb.name AS brand_name, mm.name AS model_name, mv.name AS version_name, mbv.name AS base_version_name
-        FROM t_model_ref rm
-        LEFT JOIN t_mobile_brand mb ON mb.id = rm.brand_id
-        LEFT JOIN t_mobile_model mm ON mm.id = rm.model_id
-        LEFT JOIN t_mobile_version mv ON mv.id = rm.version_id
-        LEFT JOIN t_mobile_base_version mbv ON mbv.id = rm.base_version_id
-        WHERE ref_id = #{id} and rm.type = #{type}
+        SELECT m.*,
+            mb.name AS brand_name,
+            mm.name AS model_name,
+            mv.name AS version_name,
+            mbv.name AS base_version_name
+        FROM t_model m
+        LEFT JOIN t_model_ref mr ON m.id = mr.model_id
+        LEFT JOIN t_mobile_brand mb ON mb.id = m.brand_id
+        LEFT JOIN t_mobile_model mm ON mm.id = m.model_id
+        LEFT JOIN t_mobile_version mv ON mv.id = m.version_id
+        LEFT JOIN t_mobile_base_version mbv ON mbv.id = m.base_version_id
+        WHERE mr.ref_id = #{id} and mr.type = #{type}
         <if test="sortName != null">
-            ORDER BY rm.${sortName} ${sortDir}
+            ORDER BY m.${sortName} ${sortDir}
         </if>
     </select>
 
     <select id="selectAllModel" resultType="java.util.HashMap">
         SELECT
+            m.id,
             mb.id AS brand_id,
             mb.`name` AS brand_name,
             mm.id AS model_id,
@@ -28,9 +34,36 @@
             mbv.id AS base_version_id,
             mbv.`name` AS base_version_name
         FROM
-            t_mobile_brand mb
+            t_model m
+        LEFT JOIN t_mobile_brand mb ON mb.id = m.brand_id
+        LEFT JOIN t_mobile_model mm ON mm.id = m.model_id
+        LEFT JOIN t_mobile_version mv ON mv.id = m.version_id
+        LEFT JOIN t_mobile_base_version mbv ON mbv.id = m.base_version_id
+        GROUP BY m.id
+    </select>
+
+    <select id="selectModelByName" resultType="java.util.HashMap">
+        SELECT
+          mb.id AS brand_id,
+          mm.id AS model_id,
+          mv.id AS version_id,
+          mbv.id AS base_version_id
+        FROM t_mobile_brand mb
         LEFT JOIN t_mobile_model mm ON mm.brand_id = mb.id
         LEFT JOIN t_mobile_version mv ON mv.model_id = mm.id
         LEFT JOIN t_mobile_base_version mbv ON mbv.version_id = mv.id
+        WHERE 1=1
+        <if test="brand != null">
+            AND mb.name = #{brand}
+        </if>
+        <if test="model != null">
+            AND mm.name = #{model}
+        </if>
+        <if test="version != null">
+            AND mv.name = #{version}
+        </if>
+        <if test="base != null">
+            AND mbv.name = #{base}
+        </if>
     </select>
 </mapper>

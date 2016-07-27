@@ -9,17 +9,19 @@ import javax.persistence.Table;
  * @author zhouxianjun(Alone)
  * @ClassName:
  * @Description:
- * @date 16-7-25 下午9:09
+ * @date 16-7-24 上午11:27
  */
 @Data
-@Table(name = "t_model_ref")
-public class ModelRef {
+@Table(name = "t_model")
+public class Model {
     @Id
+    private Long id;
+
+    private Long brand_id;
+
     private Long model_id;
 
-    @Id
-    private Long ref_id;
+    private Long version_id;
 
-    @Id
-    private Integer type;
+    private Long base_version_id;
 }

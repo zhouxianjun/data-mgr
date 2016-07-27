@@ -22,5 +22,7 @@ public interface AppPackageMapper extends PageMapper<AppPackage> {
 
     List<HashMap<String, Object>> appAndResourcesAllList(@Param("id") Long id, @Param("type") Integer type);
 
+    List<AppPackage> allListByModel(@Param("user") Long user, @Param("model") Long model);
+
     List<AppPackage> allList(@Param("user") Long user);
 }

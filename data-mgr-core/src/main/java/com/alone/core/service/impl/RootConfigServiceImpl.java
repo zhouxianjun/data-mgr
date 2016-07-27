@@ -1,7 +1,7 @@
 package com.alone.core.service.impl;
 
 import com.alone.common.dto.DataSourceType;
-import com.alone.common.entity.ModelRef;
+import com.alone.common.entity.Model;
 import com.alone.common.entity.RootConfig;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
@@ -56,7 +56,7 @@ public class RootConfigServiceImpl implements RootConfigService.Iface {
 
     @Override
     public boolean remove(long id) throws InvalidOperation, TException {
-        Example del = new Example(ModelRef.class);
+        Example del = new Example(Model.class);
         del.createCriteria().andEqualTo("ref_id", id).andEqualTo("type", 1);
         modelRefMapper.deleteByExample(del);
         if (rootConfigMapper.deleteByPrimaryKey(id) <= 0)

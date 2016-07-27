@@ -16,9 +16,5 @@ import java.util.List;
 public interface AppWhiteMapper extends PageMapper<AppWhite> {
     List<AppWhite> allList(@Param("user") Long user);
 
-    List<HashMap<String, Object>> allAndResourcesListByModel(@Param("user") Long user,
-                                                 @Param("brand_id") Long brand_id,
-                                                 @Param("model_id") Long model_id,
-                                                 @Param("version_id") Long version_id,
-                                                 @Param("base_version_id") Long base_version_id);
+    List<HashMap<String, Object>> allAndResourcesListByModel(@Param("user") Long user, @Param("model") Long model);
 }

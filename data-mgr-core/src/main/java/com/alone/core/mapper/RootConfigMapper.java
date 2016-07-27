@@ -16,8 +16,5 @@ import java.util.List;
 public interface RootConfigMapper extends PageMapper<RootConfig> {
     List<HashMap<String, Object>> listAllAndResources();
 
-    List<HashMap<String, Object>> allAndResourcesListByModel(@Param("brand_id") Long brand_id,
-                                                             @Param("model_id") Long model_id,
-                                                             @Param("version_id") Long version_id,
-                                                             @Param("base_version_id") Long base_version_id);
+    List<HashMap<String, Object>> allAndResourcesListByModel(@Param("model") Long model);
 }

@@ -147,7 +147,7 @@ struct RequirePackageStruct {
     5: optional list<i64> pre,
     6: optional list<i64> install
 }
-struct ModelRefStruct {
+struct ModelStruct {
     1: i64 id,
     2: i64 brand_id,
     3: i64 model_id,

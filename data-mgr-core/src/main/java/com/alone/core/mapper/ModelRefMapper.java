@@ -17,5 +17,7 @@ import java.util.List;
 public interface ModelRefMapper extends Mapper<ModelRef> {
     List<HashMap<String, Object>> listModelByPage(@Param("page") Page page, @Param("id") Long id, @Param("type") Integer type, @Param("sortName") String sortName, @Param("sortDir") String sortDir);
 
-    List<HashMap<String, Object>> selectAllModel();
+    List<HashMap<String, Object>> selectAllModel(@Param("type") Integer type);
+
+    HashMap<String, Object> selectModelByName(@Param("brand") Object brand, @Param("model") Object model, @Param("version") Object version, @Param("base") Object base);
 }
