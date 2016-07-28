@@ -180,6 +180,17 @@ struct InstallActiveStruct {
     3: string memo,
     4: i32 hours
 }
+struct DeductionStruct {
+    1: i64 id,
+    2: string name,
+    3: i32 percent,
+    4: i32 start,
+    5: i32 model,
+    6: bool status,
+    7: i64 start_time,
+    8: i64 end_time,
+    9: i64 user_id
+}
 exception InvalidOperation {
     1: i32 code,
     2: string msg

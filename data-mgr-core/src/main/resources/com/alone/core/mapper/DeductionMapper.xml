@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alone.core.mapper.DeductionMapper">
+    <select id="listByPage" resultType="java.util.HashMap">
+        SELECT * FROM t_deduction
+        <if test="sortName != null">
+            ORDER BY ${sortName} ${sortDir}
+        </if>
+    </select>
+
+    <select id="getUsers" resultType="User">
+        SELECT u.* FROM t_user u
+        LEFT JOIN t_deduction_user du ON du.user_id = u.id
+        WHERE du.deduction_id = #{id}
+    </select>
+
+    <select id="getApps" resultType="App">
+        SELECT a.* FROM t_app a
+        LEFT JOIN t_deduction_app da ON da.app_id = a.id
+        WHERE da.deduction_id = #{id}
+    </select>
+</mapper>
