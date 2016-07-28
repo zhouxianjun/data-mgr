@@ -13,11 +13,11 @@ echo 'Ready to running the I/O service...'
 
 OPTS="-server \
 	  -da \
-	  -Xms256m \
-	  -Xmx256m \
+	  -Xms512m \
+	  -Xmx1024m \
 	  -Xss256k \
 	  -XX:PermSize=128m \
-	  -XX:MaxPermSize=128m \
+	  -XX:MaxPermSize=256m \
 	  -XX:SurvivorRatio=9 \
 	  -XX:+UseConcMarkSweepGC \
 	  -XX:ParallelCMSThreads=4 \
@@ -34,7 +34,8 @@ OPTS="-server \
 	  -XX:+UseFastAccessorMethods \
 	  -XX:+AggressiveOpts \
 	  -XX:+UseBiasedLocking \
-	  -XX:+DisableExplicitGC"
+      -XX:+HeapDumpOnOutOfMemoryError \
+      -XX:MaxDirectMemorySize=1024m"
 
 env LC_ALL="en_US.UTF-8" java $OPTS -cp ./config:$JRE_HOME/lib/*:./lib/*:data-mgr-core.jar com.alone.core.Server &
 
