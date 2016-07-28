@@ -3,6 +3,7 @@ package com.alone.core.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.entity.*;
 import com.alone.common.mybatis.DataSource;
@@ -111,7 +112,7 @@ public class ApiServiceImpl implements ApiService.Iface {
         result.put("all_roots", getRootConfig(url));
         result.put("install_active", getInstallActive(user));
         result.put("models", getModel(user, url));
-        return JSONObject.toJSONString(result);
+        return JSONObject.toJSONString(result, SerializerFeature.DisableCircularReferenceDetect);
     }
 
     @Override
@@ -376,9 +377,6 @@ public class ApiServiceImpl implements ApiService.Iface {
             if (apps != null) {
                 filterMoreInfo(apps, url);
             }
-            HashMap<String, Object> map = new HashMap<>();
-            List list = new ArrayList();
-            list.add(map);
             appMap.put("apps", apps);
         }
     }
