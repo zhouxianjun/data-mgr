@@ -73,6 +73,12 @@ public class ApiServiceImpl implements ApiService.Iface {
     @Autowired
     private AppInstallMapper appInstallMapper;
 
+    @Autowired
+    private AppActiveDataMapper appActiveDataMapper;
+
+    @Autowired
+    private MobileActiveDataMapper mobileActiveDataMapper;
+
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
@@ -215,6 +221,75 @@ public class ApiServiceImpl implements ApiService.Iface {
             install.setInstalled(0);
         }
         parseApp(install, app);
+        return true;
+    }
+
+    @Override
+    public boolean appActive(String box_id, String data, long user, String ip) throws InvalidOperation, TException {
+        Box b = new Box();
+        b.setBox_id(box_id);
+        Box dbBox = boxMapper.selectOne(b);
+        if (dbBox == null) return false;
+
+        JSONObject jsonData = JSON.parseObject(data);
+        JSONObject mobile = jsonData.getJSONObject("mobile_info");
+        HashMap<String, Object> model = modelRefMapper.selectModelByName(
+                mobile.get("brand"),
+                mobile.get("model"),
+                mobile.get("android_version"),
+                mobile.get("baseband_version"));
+
+        AppActiveData appActiveData = new AppActiveData();
+        appActiveData.setId(Utils.generateUUID());
+        appActiveData.setBox_id(dbBox.getId());
+        appActiveData.setMobile_code(mobile.getString("mobile_id"));
+        appActiveData.setImei(mobile.getString("imei"));
+        appActiveData.setBrand_id((Long) model.get("brand_id"));
+        appActiveData.setModel_id((Long) model.get("model_id"));
+        appActiveData.setVersion_id((Long) model.get("version_id"));
+        appActiveData.setBase_version_id((Long) model.get("base_version_id"));
+        appActiveData.setIp(ip);
+        appActiveData.setUser_id(user);
+        appActiveData.setApp_package_id(jsonData.getLong("application_id"));
+        appActiveData.setApp_id(jsonData.getLong("app_id"));
+        appActiveData.setActive_time(parseDate(jsonData.getString("activit_time")));
+        appActiveData.setCreate_time(new Date());
+
+        appActiveDataMapper.insertSelective(appActiveData);
+        return true;
+    }
+
+    @Override
+    public boolean mobileActive(String box_id, String data, long user, String ip) throws InvalidOperation, TException {
+        Box b = new Box();
+        b.setBox_id(box_id);
+        Box dbBox = boxMapper.selectOne(b);
+        if (dbBox == null) return false;
+
+        JSONObject jsonData = JSON.parseObject(data);
+        JSONObject mobile = jsonData.getJSONObject("mobile_info");
+        HashMap<String, Object> model = modelRefMapper.selectModelByName(
+                mobile.get("brand"),
+                mobile.get("model"),
+                mobile.get("android_version"),
+                mobile.get("baseband_version"));
+
+        MobileActiveData mobileActiveData = new MobileActiveData();
+        mobileActiveData.setId(Utils.generateUUID());
+        mobileActiveData.setBox_id(dbBox.getId());
+        mobileActiveData.setMobile_code(mobile.getString("mobile_id"));
+        mobileActiveData.setImei(mobile.getString("imei"));
+        mobileActiveData.setBrand_id((Long) model.get("brand_id"));
+        mobileActiveData.setModel_id((Long) model.get("model_id"));
+        mobileActiveData.setVersion_id((Long) model.get("version_id"));
+        mobileActiveData.setBase_version_id((Long) model.get("base_version_id"));
+        mobileActiveData.setIp(ip);
+        mobileActiveData.setUser_id(user);
+        mobileActiveData.setApp_package_id(jsonData.getLong("application_id"));
+        mobileActiveData.setActive_time(parseDate(jsonData.getString("activit_time")));
+        mobileActiveData.setCreate_time(new Date());
+
+        mobileActiveDataMapper.insertSelective(mobileActiveData);
         return true;
     }
 

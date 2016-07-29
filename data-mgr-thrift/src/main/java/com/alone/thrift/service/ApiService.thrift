@@ -8,4 +8,8 @@ service ApiService {
     string getBoxResourcesList(1: i64 user, 2: string url) throws (1: PublicStruct.InvalidOperation ex);
 
     bool uploadBrush(1: string box_id, 2: string data, 3: i64 user, 4: string ip) throws (1: PublicStruct.InvalidOperation ex);
+
+    bool appActive(1: string box_id, 2: string data, 3: i64 user, 4: string ip) throws (1: PublicStruct.InvalidOperation ex);
+
+    bool mobileActive(1: string box_id, 2: string data, 3: i64 user, 4: string ip) throws (1: PublicStruct.InvalidOperation ex);
 }
