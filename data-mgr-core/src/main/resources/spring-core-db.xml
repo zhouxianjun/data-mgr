@@ -44,7 +44,7 @@
 		<property name="removeAbandonedTimeout" value="180" />
 		<!-- 关闭abanded连接时输出错误日志 -->
 		<property name="logAbandoned" value="true" />
-		<property name="filters" value="stat,slf4j" />
+		<property name="filters" value="stat,slf4j,wall" />
 	</bean>
 	<bean id="coreReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${core.read.db.jdbc.url}" />
@@ -69,7 +69,7 @@
 		<property name="removeAbandonedTimeout" value="180" />
 		<!-- 关闭abanded连接时输出错误日志 -->
 		<property name="logAbandoned" value="true" />
-		<property name="filters" value="stat,slf4j" />
+		<property name="filters" value="stat,slf4j,wall" />
 	</bean>
 	
 	<!-- 动态数据源，可以在运行时通过相应的holder动态改变当前的数据源-->
