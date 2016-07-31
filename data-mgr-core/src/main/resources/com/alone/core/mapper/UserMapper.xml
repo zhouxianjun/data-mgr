@@ -19,4 +19,11 @@
         FIND_IN_SET(#{user}, u.pids)
         AND FIND_IN_SET(ur.role_id,#{roles})
     </delete>
+    <select id="info" resultType="java.util.HashMap">
+        SELECT u.name, u.real_name, u.company, u.city_id, u.province_id, u.email, u.phone,
+          r.name AS role_name
+        FROM t_user u LEFT JOIN t_user_role ur on ur.user_id = u.id
+        LEFT JOIN t_role r ON r.id = ur.role_id
+        WHERE u.id = #{id}
+    </select>
 </mapper>

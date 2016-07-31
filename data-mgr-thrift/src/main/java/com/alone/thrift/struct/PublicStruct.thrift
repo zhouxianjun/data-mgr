@@ -52,14 +52,16 @@ struct PageParamStruct {
     1: optional i32 page = 1,
     2: optional i32 pageSize = 15,
     3: optional string sortName,
-    4: optional string sortDir
+    4: optional string sortDir,
+    5: optional map<string, string> query
 }
 struct PageStruct {
     1: i32 pageNum,
     2: i32 pageSize,
     3: i32 count,
     4: i32 current,
-    5: string items
+    5: string items,
+    6: optional map<string, string> query
 }
 struct ResourcesStruct {
     1: i64 id,
@@ -172,7 +174,9 @@ struct PushStruct {
     8: optional ResourcesStruct app,
     9: optional double deduct,
     10: optional string url,
-    11: i32 status
+    11: i32 status,
+    12: i64 start_time,
+    13: i64 end_time
 }
 struct InstallActiveStruct {
     1: i64 id,

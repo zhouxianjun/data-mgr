@@ -69,6 +69,14 @@
     </select>
     <select id="listByPage" resultType="Interface">
         SELECT * FROM t_interface
+        WHERE 1=1
+        <if test="page.query != null">
+            <foreach collection="page.query.keys" item="k" separator=" ">
+                <if test="null != page.query[k]">
+                    AND ${k} LIKE '%${page.query[k]}%'
+                </if>
+            </foreach>
+        </if>
         <if test="sortName != null">
           ORDER BY ${sortName} ${sortDir}
         </if>

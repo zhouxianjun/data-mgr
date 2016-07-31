@@ -1,25 +1,36 @@
 package com.alone.common.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Page<T> implements Serializable {
 	private static final long serialVersionUID = 1000846308236576343L;
 
 	//当前页
+	@Getter
+	@Setter
 	private int pageNum;
-	
+
+	@Getter
+	@Setter
 	private int pageSize;
 	//总记录数
+	@Getter
 	private int count;
-	
+
+	@Setter
 	private List<T> items;
+
+	@Setter
+	@Getter
+	private Map<String, String> query;
 	
-	public int getCount() {
-		return count;
-	}
 	public void setCount(int count) {
 		this.count = count;
 	}
@@ -28,27 +39,12 @@ public class Page<T> implements Serializable {
 			items = new ArrayList<T>();
 		return items;
 	}
-	public void setItems(List<T> items) {
-		this.items = items;
-	}
 	public int getTotalPage() {
 		int totalPage = count / pageSize;
 		if (totalPage == 0 || count % pageSize != 0) {
 			totalPage++;
 		}
 		return totalPage;
-	}
-	public int getPageNum() {
-		return pageNum;
-	}
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
-	}
-	public int getPageSize() {
-		return pageSize;
-	}
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
 	}
 
 	/**

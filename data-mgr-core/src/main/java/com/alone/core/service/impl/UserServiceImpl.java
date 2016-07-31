@@ -1,5 +1,6 @@
 package com.alone.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alone.common.dto.DataSourceType;
 import com.alone.common.dto.EmailDto;
 import com.alone.common.entity.Role;
@@ -107,8 +108,19 @@ public class UserServiceImpl implements UserService.Iface {
             return false;
         if (bean.isSetStatus()) {
             userMapper.updateChildStatus(u.getId(), u.getStatus());
+        } else {
+            u.setStatus(null);
         }
+        String pwd = u.getPassword();
+        if (StringUtils.isNotEmpty(pwd))
+            u.setPassword(Utils.MD5(u.getUsername() + pwd));
         u.setPids(pids);
+        if (!bean.isSetPid())
+            u.setPid(null);
+        if (!bean.isSetCity_id())
+            u.setCity_id(null);
+        if (!bean.isSetUsername())
+            u.setUsername(null);
         return userMapper.updateByPrimaryKeySelective(u) > 0;
     }
 
@@ -179,10 +191,20 @@ public class UserServiceImpl implements UserService.Iface {
     @DataSource(DataSourceType.READ)
     public UserStruct login(String username, String password) throws InvalidOperation, TException {
         User user = getByUsername(username);
+        if (user != null && !user.getStatus()) {
+            throw new InvalidOperation(500, "用户已被禁用,请联系管理员");
+        }
         if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {
             return Utils.java2Thrift(new UserStruct(), user);
         }
-        return new UserStruct();
+        throw new InvalidOperation(500, "用户帐号密码错误");
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @DataSource(DataSourceType.READ)
+    public String info(long id) throws InvalidOperation, TException {
+        return JSON.toJSONString(userMapper.info(id));
     }
 
     private User getByUsername(String username) {

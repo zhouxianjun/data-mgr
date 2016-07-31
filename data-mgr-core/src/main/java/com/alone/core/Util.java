@@ -17,7 +17,9 @@ import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhouxianjun(Alone)
@@ -30,6 +32,7 @@ public class Util {
         Page<T> p = new Page<>();
         p.setPageNum(page.getPage());
         p.setPageSize(page.getPageSize());
+        p.setQuery(page.getQuery());
         List list = pageMapper.listByPage(p, page.getSortName(), page.getSortDir());
         return new PageStruct(p.getPageNum(), p.getPageSize(),
                 p.getCount(), page.getPage(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));

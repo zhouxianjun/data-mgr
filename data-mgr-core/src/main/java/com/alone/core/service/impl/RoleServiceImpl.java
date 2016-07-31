@@ -98,12 +98,13 @@ public class RoleServiceImpl implements RoleService.Iface {
     public boolean update(long id, String name, boolean status, long pid) throws TException {
         Role role = roleMapper.selectByPrimaryKey(id);
         roleMapper.updateChildStatus(id, status);
-        if (role.getPid() != pid) {
+        if (role.getPid() != pid && pid > 0) {
             Role parent = roleMapper.selectByPrimaryKey(pid);
             role.setPids(StringUtils.isEmpty(parent.getPids()) ? String.valueOf(parent.getId()) : parent.getId() + "," + parent.getPids());
         }
         role.setName(name);
-        role.setPid(pid);
+        if (pid > 0)
+            role.setPid(pid);
         role.setStatus(status);
         role.setUpdate_time(new Date());
         return roleMapper.updateByPrimaryKeySelective(role) > 0;

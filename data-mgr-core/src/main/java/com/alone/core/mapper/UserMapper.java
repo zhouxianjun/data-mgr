@@ -4,6 +4,7 @@ import com.alone.common.entity.User;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface UserMapper extends Mapper<User> {
     Integer updateChildStatus(@Param("pid") Long pid, @Param("status") Boolean status);
 
     Integer deleteUserChildrenRoles(@Param("user") Long user, @Param("roles") String roles);
+
+    HashMap<String, Object> info(@Param("id") Long id);
 }

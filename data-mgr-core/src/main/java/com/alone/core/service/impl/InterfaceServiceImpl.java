@@ -1,12 +1,10 @@
 package com.alone.core.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alone.common.dto.DataSourceType;
-import com.alone.common.dto.Page;
 import com.alone.common.entity.Interface;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.util.Utils;
+import com.alone.core.Util;
 import com.alone.core.mapper.InterfaceMapper;
 import com.alone.thrift.service.InterfaceService;
 import com.alone.thrift.struct.InterfaceStruct;
@@ -46,14 +44,7 @@ public class InterfaceServiceImpl implements InterfaceService.Iface {
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
     public PageStruct interfacesByPage(PageParamStruct page) throws InvalidOperation, TException {
-        Page<Interface> interfacePage = new Page<>();
-        interfacePage.setPageNum(page.getPage());
-        interfacePage.setPageSize(page.getPageSize());
-        List<Interface> list = interfaceMapper.listByPage(interfacePage, page.getSortName(), page.getSortDir());
-        interfacePage.setItems(list);
-        PageStruct struct = new PageStruct(interfacePage.getPageNum(), interfacePage.getPageSize(),
-                interfacePage.getCount(), interfacePage.getCurrentIndex(), JSONArray.toJSONString(list, SerializerFeature.WriteMapNullValue));
-        return struct;
+        return Util.buildListPage(page, interfaceMapper);
     }
 
     @Override

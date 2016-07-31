@@ -30,4 +30,23 @@
             </choose>
         </if>
     </select>
+
+    <select id="getUnRead" resultType="java.util.HashMap">
+        SELECT p.*,
+          appr.name AS app_resources_name, appr.md5 AS app_md5, appr.size AS app_size,
+          imgr.name AS img_resources_name, imgr.md5 AS img_md5, imgr.size AS img_size
+        FROM t_push p
+        LEFT JOIN t_resources appr ON appr.id = p.app_resources_id
+        LEFT JOIN t_resources imgr ON imgr.id = p.img_resources_id
+        WHERE p.status = 1
+        AND p.client_type = #{type}
+        AND NOW() > p.start_time AND (NOW() &lt; p.end_time OR ISNULL(p.end_time))
+        AND p.id > IFNULL((SELECT push_id FROM t_client_push WHERE user_id = #{user} AND client_code = #{client} AND client_type = #{type}), 0)
+        order by p.id
+        limit 0, 100
+    </select>
+
+    <update id="readPush">
+        INSERT t_client_push VALUES (#{user},#{client},#{type},#{push}) ON DUPLICATE KEY UPDATE push_id = #{push}
+    </update>
 </mapper>

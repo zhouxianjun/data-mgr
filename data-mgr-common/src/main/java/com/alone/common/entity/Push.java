@@ -49,4 +49,8 @@ public class Push {
     private Integer status;
 
     private Date create_time;
+
+    private Date start_time;
+
+    private Date end_time;
 }
