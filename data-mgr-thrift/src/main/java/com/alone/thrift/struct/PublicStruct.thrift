@@ -6,7 +6,8 @@ struct RoleStruct {
     5: i64 create_time,
     6: i64 update_time,
     7: bool status,
-    8: optional bool ow
+    8: optional bool ow,
+    9: bool only_login
 }
 struct MenuStruct {
     1: i64 id,

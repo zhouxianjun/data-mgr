@@ -27,6 +27,8 @@ public class Role implements Serializable {
 
     private Boolean status;
 
+    private Boolean only_login;
+
     private Date create_time;
 
     private Date update_time;

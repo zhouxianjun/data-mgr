@@ -45,6 +45,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private static final org.apache.thrift.protocol.TField UPDATE_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("update_time", org.apache.thrift.protocol.TType.I64, (short)6);
   private static final org.apache.thrift.protocol.TField STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("status", org.apache.thrift.protocol.TType.BOOL, (short)7);
   private static final org.apache.thrift.protocol.TField OW_FIELD_DESC = new org.apache.thrift.protocol.TField("ow", org.apache.thrift.protocol.TType.BOOL, (short)8);
+  private static final org.apache.thrift.protocol.TField ONLY_LOGIN_FIELD_DESC = new org.apache.thrift.protocol.TField("only_login", org.apache.thrift.protocol.TType.BOOL, (short)9);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -59,6 +60,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private long update_time; // required
   private boolean status; // required
   private boolean ow; // optional
+  private boolean only_login; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -68,7 +70,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     CREATE_TIME((short)5, "create_time"),
     UPDATE_TIME((short)6, "update_time"),
     STATUS((short)7, "status"),
-    OW((short)8, "ow");
+    OW((short)8, "ow"),
+    ONLY_LOGIN((short)9, "only_login");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -97,6 +100,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
           return STATUS;
         case 8: // OW
           return OW;
+        case 9: // ONLY_LOGIN
+          return ONLY_LOGIN;
         default:
           return null;
       }
@@ -143,6 +148,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
   private static final int __UPDATE_TIME_ISSET_ID = 3;
   private static final int __STATUS_ISSET_ID = 4;
   private static final int __OW_ISSET_ID = 5;
+  private static final int __ONLY_LOGIN_ISSET_ID = 6;
   private byte __isset_bitfield = 0;
   private static final _Fields optionals[] = {_Fields.OW};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
@@ -162,6 +168,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     tmpMap.put(_Fields.OW, new org.apache.thrift.meta_data.FieldMetaData("ow", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+    tmpMap.put(_Fields.ONLY_LOGIN, new org.apache.thrift.meta_data.FieldMetaData("only_login", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(RoleStruct.class, metaDataMap);
   }
@@ -175,7 +183,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     long pid,
     long create_time,
     long update_time,
-    boolean status)
+    boolean status,
+    boolean only_login)
   {
     this();
     this.id = id;
@@ -189,6 +198,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     setUpdate_timeIsSet(true);
     this.status = status;
     setStatusIsSet(true);
+    this.only_login = only_login;
+    setOnly_loginIsSet(true);
   }
 
   /**
@@ -205,6 +216,7 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     this.update_time = other.update_time;
     this.status = other.status;
     this.ow = other.ow;
+    this.only_login = other.only_login;
   }
 
   public RoleStruct deepCopy() {
@@ -226,6 +238,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     this.status = false;
     setOwIsSet(false);
     this.ow = false;
+    setOnly_loginIsSet(false);
+    this.only_login = false;
   }
 
   public long getId() {
@@ -390,6 +404,29 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __OW_ISSET_ID, value);
   }
 
+  public boolean isOnly_login() {
+    return this.only_login;
+  }
+
+  public RoleStruct setOnly_login(boolean only_login) {
+    this.only_login = only_login;
+    setOnly_loginIsSet(true);
+    return this;
+  }
+
+  public void unsetOnly_login() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __ONLY_LOGIN_ISSET_ID);
+  }
+
+  /** Returns true if field only_login is set (has been assigned a value) and false otherwise */
+  public boolean isSetOnly_login() {
+    return EncodingUtils.testBit(__isset_bitfield, __ONLY_LOGIN_ISSET_ID);
+  }
+
+  public void setOnly_loginIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ONLY_LOGIN_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -448,6 +485,14 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       }
       break;
 
+    case ONLY_LOGIN:
+      if (value == null) {
+        unsetOnly_login();
+      } else {
+        setOnly_login((Boolean)value);
+      }
+      break;
+
     }
   }
 
@@ -474,6 +519,9 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     case OW:
       return isOw();
 
+    case ONLY_LOGIN:
+      return isOnly_login();
+
     }
     throw new IllegalStateException();
   }
@@ -499,6 +547,8 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       return isSetStatus();
     case OW:
       return isSetOw();
+    case ONLY_LOGIN:
+      return isSetOnly_login();
     }
     throw new IllegalStateException();
   }
@@ -579,6 +629,15 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         return false;
     }
 
+    boolean this_present_only_login = true;
+    boolean that_present_only_login = true;
+    if (this_present_only_login || that_present_only_login) {
+      if (!(this_present_only_login && that_present_only_login))
+        return false;
+      if (this.only_login != that.only_login)
+        return false;
+    }
+
     return true;
   }
 
@@ -620,6 +679,11 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
     list.add(present_ow);
     if (present_ow)
       list.add(ow);
+
+    boolean present_only_login = true;
+    list.add(present_only_login);
+    if (present_only_login)
+      list.add(only_login);
 
     return list.hashCode();
   }
@@ -702,6 +766,16 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetOnly_login()).compareTo(other.isSetOnly_login());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetOnly_login()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.only_login, other.only_login);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -755,6 +829,10 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       sb.append(this.ow);
       first = false;
     }
+    if (!first) sb.append(", ");
+    sb.append("only_login:");
+    sb.append(this.only_login);
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -856,6 +934,14 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 9: // ONLY_LOGIN
+            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+              struct.only_login = iprot.readBool();
+              struct.setOnly_loginIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -896,6 +982,9 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
         oprot.writeBool(struct.ow);
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(ONLY_LOGIN_FIELD_DESC);
+      oprot.writeBool(struct.only_login);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -935,7 +1024,10 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (struct.isSetOw()) {
         optionals.set(6);
       }
-      oprot.writeBitSet(optionals, 7);
+      if (struct.isSetOnly_login()) {
+        optionals.set(7);
+      }
+      oprot.writeBitSet(optionals, 8);
       if (struct.isSetId()) {
         oprot.writeI64(struct.id);
       }
@@ -957,12 +1049,15 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (struct.isSetOw()) {
         oprot.writeBool(struct.ow);
       }
+      if (struct.isSetOnly_login()) {
+        oprot.writeBool(struct.only_login);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, RoleStruct struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(7);
+      BitSet incoming = iprot.readBitSet(8);
       if (incoming.get(0)) {
         struct.id = iprot.readI64();
         struct.setIdIsSet(true);
@@ -990,6 +1085,10 @@ public class RoleStruct implements org.apache.thrift.TBase<RoleStruct, RoleStruc
       if (incoming.get(6)) {
         struct.ow = iprot.readBool();
         struct.setOwIsSet(true);
+      }
+      if (incoming.get(7)) {
+        struct.only_login = iprot.readBool();
+        struct.setOnly_loginIsSet(true);
       }
     }
   }
