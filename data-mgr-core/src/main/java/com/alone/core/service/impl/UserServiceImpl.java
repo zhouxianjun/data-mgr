@@ -9,7 +9,9 @@ import com.alone.common.entity.UserRole;
 import com.alone.common.mybatis.DataSource;
 import com.alone.common.service.EmailNotifyService;
 import com.alone.common.util.Utils;
-import com.alone.core.mapper.*;
+import com.alone.core.mapper.RoleMapper;
+import com.alone.core.mapper.UserMapper;
+import com.alone.core.mapper.UserRoleMapper;
 import com.alone.thrift.service.UserService;
 import com.alone.thrift.struct.InvalidOperation;
 import com.alone.thrift.struct.UserStruct;
@@ -189,13 +191,13 @@ public class UserServiceImpl implements UserService.Iface {
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
-    public UserStruct login(String username, String password) throws InvalidOperation, TException {
+    public String login(String username, String password) throws InvalidOperation, TException {
         User user = getByUsername(username);
         if (user != null && !user.getStatus()) {
             throw new InvalidOperation(500, "用户已被禁用,请联系管理员");
         }
         if (user != null && user.getPassword().equals(Utils.MD5(username + password))) {
-            return Utils.java2Thrift(new UserStruct(), user);
+            return info(user.getId());
         }
         throw new InvalidOperation(500, "用户帐号密码错误");
     }
@@ -204,7 +206,10 @@ public class UserServiceImpl implements UserService.Iface {
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
     public String info(long id) throws InvalidOperation, TException {
-        return JSON.toJSONString(userMapper.info(id));
+        List<Role> roles = userMapper.getRoles(id);
+        HashMap<String, Object> info = userMapper.info(id);
+        info.put("roles", roles);
+        return JSON.toJSONString(info);
     }
 
     private User getByUsername(String username) {

@@ -82,12 +82,16 @@ public class ApiServiceImpl implements ApiService.Iface {
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
-    public long boxLogin(String username, String password, String box_id) throws InvalidOperation, TException {
-        UserStruct struct = userService.login(username, password);
-        if (struct.getId() <= 0)
-            return 0;
-        Box box = userRefMapper.getBox(struct.getId(), box_id);
-        return box == null ? 0 : struct.getId();
+    public String boxLogin(String username, String password, String box_id) throws InvalidOperation, TException {
+        String struct = userService.login(username, password);
+        JSONObject object = JSON.parseObject(struct);
+        if (object.get("id") == null || object.getLong("id") <= 0)
+            return null;
+        Box box = userRefMapper.getBox(object.getLong("id"), box_id);
+        if (box == null)
+            return null;
+        object.put("box_id", box.getId());
+        return object.toString();
     }
 
     @Override

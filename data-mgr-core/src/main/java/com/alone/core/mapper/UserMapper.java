@@ -1,5 +1,6 @@
 package com.alone.core.mapper;
 
+import com.alone.common.entity.Role;
 import com.alone.common.entity.User;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -21,4 +22,6 @@ public interface UserMapper extends Mapper<User> {
     Integer deleteUserChildrenRoles(@Param("user") Long user, @Param("roles") String roles);
 
     HashMap<String, Object> info(@Param("id") Long id);
+
+    List<Role> getRoles(@Param("user") Long user);
 }

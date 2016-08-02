@@ -11,7 +11,7 @@ service UserService {
 
     bool setRoles(1: i64 user, 2: i64 parent, 3: list<i64> roles) throws (1: PublicStruct.InvalidOperation ex);
 
-    PublicStruct.UserStruct login(1: string username, 2: string password) throws (1: PublicStruct.InvalidOperation ex);
+    string login(1: string username, 2: string password) throws (1: PublicStruct.InvalidOperation ex);
 
     string info(1: i64 id) throws (1: PublicStruct.InvalidOperation ex);
 }
