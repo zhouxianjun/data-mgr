@@ -79,6 +79,9 @@ public class ApiServiceImpl implements ApiService.Iface {
     @Autowired
     private MobileActiveDataMapper mobileActiveDataMapper;
 
+    @Autowired
+    private LogInfoMapper logInfoMapper;
+
     @Override
     @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
     @DataSource(DataSourceType.READ)
@@ -201,6 +204,8 @@ public class ApiServiceImpl implements ApiService.Iface {
         logInfo.setEnd_time(parseDate(jsonData.getString("stopTime")));
         logInfo.setCreate_time(new Date());
 
+        logInfoMapper.insertSelective(logInfo);
+
         MobileInstall install = new MobileInstall();
         BeanUtils.copyProperties(logInfo, install);
         install.setApp_package_id(application_id);
@@ -300,11 +305,11 @@ public class ApiServiceImpl implements ApiService.Iface {
     private void parseApp(MobileInstall mobileInstall, JSONArray app) {
         int installapps = 0;
         if (app != null) {
-            AppInstall appInstall = new AppInstall();
-            appInstall.setId(Utils.generateUUID());
-            BeanUtils.copyProperties(mobileInstall, appInstall);
             for (int i = 0; i < app.size(); i++) {
                 try {
+                    AppInstall appInstall = new AppInstall();
+                    BeanUtils.copyProperties(mobileInstall, appInstall);
+                    appInstall.setId(Utils.generateUUID());
                     JSONObject a = app.getJSONObject(i);
                     Long app_id = a.getLong("app_id");
                     Integer install_type = a.getInteger("install_type");
@@ -319,6 +324,7 @@ public class ApiServiceImpl implements ApiService.Iface {
                     appInstallMapper.insertSelective(appInstall);
                 } catch (Exception e) {
                     log.error("error app install", e);
+                    throw e;
                 }
             }
         }
@@ -335,6 +341,7 @@ public class ApiServiceImpl implements ApiService.Iface {
             mobileInstallMapper.insertSelective(mobileInstall);
         } catch (Exception e) {
             log.error("mobile_install error", e);
+            throw e;
         }
     }
 

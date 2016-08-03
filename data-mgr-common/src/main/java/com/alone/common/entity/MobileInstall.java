@@ -13,7 +13,7 @@ import java.util.Date;
  * @date 16-7-27 下午10:02
  */
 @Data
-@Table(name = "t_log_info")
+@Table(name = "t_mobile_install")
 public class MobileInstall {
     @Id
     private Long id;
